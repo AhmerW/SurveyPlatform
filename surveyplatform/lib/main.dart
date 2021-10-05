@@ -43,12 +43,13 @@ class SurveyPlatform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'SurveyPlatform',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        home: HomePage());
+      title: 'SurveyPlatform',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      home: HomePage(),
+    );
   }
 }
 

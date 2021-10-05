@@ -116,4 +116,15 @@ class Gift(BaseModel):
 
 
 class GiftOut(Gift):
+    uid: int  # created by
     gift_id: int
+
+
+class Item(BaseModel):
+    value: str
+
+
+class ItemOut(Item):
+    item_id: int
+    claimed: Optional[bool] = False
+    claimed_by: Optional[int] = None

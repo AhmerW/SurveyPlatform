@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 
 from responses import Success
-from globals import app
+from globals import DEV, app, base_path
 from data.db import sql
 
 from routes.survey.router_drafts import router as drafts_router
@@ -15,7 +15,7 @@ from routes.user.router import router as user_router
 from routes.auth import router as auth_router
 
 
-@app.route("/")
+@app.route(base_path)
 async def home(_):
     return Success()
 
@@ -49,8 +49,12 @@ routes: List[Route] = [
     ),
 ]
 
+_base_prefix = base_path if DEV else ""
 for route in routes:
     app.include_router(
         route.router,
-        prefix=f"/{route.prefix}",
+        prefix=f"{_base_prefix}/{route.prefix}",
     )
+
+# gunicorn deployment
+# gunicorn -w 4 -k uvicorn.workers.UvicornWorker --daemon server:app

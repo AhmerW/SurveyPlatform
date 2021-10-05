@@ -6,6 +6,7 @@ import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/services/survey_service.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/survey_answer.dart';
 
 class SurveyList extends StatefulWidget {
@@ -104,7 +105,7 @@ class _SurveyListState extends State<SurveyList> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Icon(Icons.emoji_events,
-                                      color: Colors.orange),
+                                      color: HomePage.primaryColor),
                                   Text(
                                     "${survey.points} poeng",
                                     style: TextStyle(

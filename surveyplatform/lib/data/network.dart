@@ -31,6 +31,7 @@ Future<ServerResponse> sendRequest(
     queryParameters: queryParams,
     port: port,
   );
+  print(url);
 
   late var response;
   if (requestType == RequestType.Post) {
@@ -54,12 +55,12 @@ Future<ServerResponse> sendServerRequest(
   Object? data,
 }) async {
   return await sendRequest(requestType, serverUrl,
-      path: path,
-      port: serverPort,
+      path: "$basePath$path",
       scheme: serverScheme,
       queryParams: queryParams,
       headers: headers,
-      data: data);
+      data: data,
+      port: serverPort);
 }
 
 Future<ServerResponse> sendServerRequestAuthenticated(
@@ -75,7 +76,6 @@ Future<ServerResponse> sendServerRequestAuthenticated(
 
   return await sendRequest(requestType, serverUrl,
       path: path,
-      port: serverPort,
       scheme: serverScheme,
       queryParams: queryParams,
       headers: cheaders,

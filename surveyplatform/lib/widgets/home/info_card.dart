@@ -23,15 +23,10 @@ class InfoCardContainer extends StatefulWidget {
 class _InfoCardContainerState extends State<InfoCardContainer> {
   @override
   Widget build(BuildContext context) {
-    double cardSpace = (MediaQuery.of(context).size.width * 0.8);
     bool isSmallWidth = MediaQuery.of(context).size.width < 800;
-    if (!isSmallWidth) {
-      cardSpace = cardSpace / widget.cards.length;
-    } else {
-      cardSpace = MediaQuery.of(context).size.height * 0.3;
-    }
+
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: isSmallWidth ? Axis.vertical : Axis.horizontal,
       child: Flex(
         direction: isSmallWidth ? Axis.vertical : Axis.horizontal,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,7 +37,6 @@ class _InfoCardContainerState extends State<InfoCardContainer> {
                   index,
                   Container(
                     padding: EdgeInsets.all(15),
-                    width: cardSpace,
                     child: Column(
                       children: [
                         Text(
@@ -56,10 +50,13 @@ class _InfoCardContainerState extends State<InfoCardContainer> {
                         ),
                         PhysicalModel(
                           elevation: 20,
-                          color: HomePage.backgroundColor,
+                          color: Color(0xFF384955),
                           child: Container(
-                            padding: EdgeInsets.all(30),
-                            child: Image.asset(card.asset),
+                            margin: EdgeInsets.all(30),
+                            child: Image.asset(
+                              card.asset,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],

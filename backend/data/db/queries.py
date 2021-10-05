@@ -72,6 +72,9 @@ class AnswerQueries:
 
 
 class GiftQueries:
-    Create = """
-        INSERT INTO Gifts(price, title, description) VALUES(?, ?, ?)
+    CreateGift = """
+        INSERT INTO Gifts(price, title, description) VALUES(?, ?, ?);
+    """
+    GetGiftById = """
+        SELECT * FROM Gifts WHERE Gifts.gift_id = ?;
     """

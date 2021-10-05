@@ -9,7 +9,13 @@ import 'package:surveyplatform/widgets/surveys/widgets/slider.dart';
 
 final Map<String, Map<String, dynamic>> surveyValues = {
   "Slider": {"min": 32, "max": 100, "divisions": 100},
-  "OpenEnded": {"hint": "hint", "maxChars": 2000, "minChars": 0},
+  "OpenEnded": {
+    "hint": "hint",
+    "maxChars": 2000,
+    "minChars": 0,
+    "startText": "",
+    "endText": ""
+  },
   "RatingScale": {"minValue": 0, "maxValue": 100}
 };
 final List<String> surveyWidgetsList = surveyValues.keys.toList();

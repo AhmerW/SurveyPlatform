@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/views/admin.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/login.dart';
 import 'package:surveyplatform/views/verification.dart';
 import 'package:surveyplatform/widgets/dialogs/user_dialog.dart';
@@ -46,9 +47,9 @@ class _HubPageState extends State<HubPage> {
     bool isWide = MediaQuery.of(context).size.width > 650;
 
     return Scaffold(
-      backgroundColor: Color(0xFF2B4459),
+      backgroundColor: HomePage.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xFF1B2B38),
+        backgroundColor: HomePage.backgroundColor,
         actions: [
           Provider.of<AuthStateNotifier>(context).user.admin
               ? IconButton(
@@ -107,7 +108,7 @@ class _HubPageState extends State<HubPage> {
                                 TextSpan(
                                     text: "Logg inn ",
                                     style: GoogleFonts.indieFlower(
-                                        color: Colors.orange),
+                                        color: HomePage.primaryColor),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () => {
                                             Navigator.of(context).push(
@@ -129,7 +130,7 @@ class _HubPageState extends State<HubPage> {
                         );
                 }),
                 Divider(
-                  color: Colors.orange[400],
+                  color: HomePage.primaryColor,
                 ),
                 Container(
                   constraints: BoxConstraints(
@@ -149,7 +150,7 @@ class _HubPageState extends State<HubPage> {
                   ),
                 ),
                 Divider(
-                  color: Colors.orange[400],
+                  color: HomePage.primaryColor,
                 ),
               ],
             ),

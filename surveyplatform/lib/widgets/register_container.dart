@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/login.dart';
 import 'package:surveyplatform/views/verification.dart';
 import 'package:surveyplatform/widgets/lfield.dart';
@@ -62,77 +63,89 @@ class _RegisterContainerState extends State<RegisterContainer> {
           Container(
             height: 25,
           ),
-          LoginField(
-            "password",
-            _passwdController,
-            hide: true,
-          ),
-          LoginField(
-            "repeat password",
-            _passwd2Controller,
-            hide: true,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 47,
+                child: LoginField(
+                  "password",
+                  _passwdController,
+                  hide: true,
+                  size: (MediaQuery.of(context).size.width * 0.4) / 2,
+                ),
+              ),
+              Flexible(
+                flex: 6,
+                child: Container(),
+              ),
+              Flexible(
+                flex: 47,
+                child: LoginField(
+                  "repeat password",
+                  _passwd2Controller,
+                  hide: true,
+                  size: (MediaQuery.of(context).size.width * 0.4) / 2,
+                ),
+              ),
+            ],
           ),
           Divider(),
           Container(
             padding: EdgeInsets.symmetric(
               vertical: 20,
             ),
+            height: 70,
             width: MediaQuery.of(context).size.width * 0.15,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.orange[400]),
-              onPressed: () {
-                String email = _emailController.text;
-                String username = _usernameController.text;
-                String password = _passwdController.text;
-                String password2 = _passwd2Controller.text;
-                bool _success = false;
+                style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
+                onPressed: () {
+                  String email = _emailController.text;
+                  String username = _usernameController.text;
+                  String password = _passwdController.text;
+                  String password2 = _passwd2Controller.text;
+                  bool _success = false;
 
-                setState(() {
-                  statusState.ok = false;
-                  statusState.empty = false;
-                  if (username.isEmpty) {
-                    statusState.detail = "Vennligst fyll ut brukernavn feltet.";
-                  } else if (email.isEmpty) {
-                    statusState.detail =
-                        "Vennligst skriv inn epost adressen din.\nAdressen blir bare brukt for verifisering.";
-                  } else if (password.isEmpty || password2.isEmpty) {
-                    statusState.detail =
-                        "Vennligst skriv inn passordet ditt i begge felt.";
-                  } else if (password != password2) {
-                    statusState.detail = "Passordene stemmer ikke.";
-                  } else {
-                    _success = true;
-                    statusState.detail = "Vent...";
-                  }
-                });
-                if (_success)
-                  Provider.of<AuthStateNotifier>(context, listen: false)
-                      .register(context, username, password, email)
-                      .then((response) {
-                    print(response.hasError);
-                    print(response.ok);
-                    if (!response.ok && response.hasError) {
-                      setState(() {
-                        statusState.detail = response.error!.message;
-                      });
+                  setState(() {
+                    statusState.ok = false;
+                    statusState.empty = false;
+                    if (username.isEmpty) {
+                      statusState.detail =
+                          "Vennligst fyll ut brukernavn feltet.";
+                    } else if (email.isEmpty) {
+                      statusState.detail =
+                          "Vennligst skriv inn epost adressen din.\nAdressen blir bare brukt for verifisering.";
+                    } else if (password.isEmpty || password2.isEmpty) {
+                      statusState.detail =
+                          "Vennligst skriv inn passordet ditt i begge felt.";
+                    } else if (password != password2) {
+                      statusState.detail = "Passordene stemmer ikke.";
                     } else {
-                      String? token = response.data["token"];
-                      print(token);
-                      if (token != null) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => VerificationPage(token)));
-                      }
+                      _success = true;
+                      statusState.detail = "Vent...";
                     }
                   });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Lag konto"),
-                  Icon(Icons.app_registration_sharp)
-                ],
-              ),
-            ),
+                  if (_success)
+                    Provider.of<AuthStateNotifier>(context, listen: false)
+                        .register(context, username, password, email)
+                        .then((response) {
+                      print(response.hasError);
+                      print(response.ok);
+                      if (!response.ok && response.hasError) {
+                        setState(() {
+                          statusState.detail = response.error!.message;
+                        });
+                      } else {
+                        String? token = response.data["token"];
+                        print(token);
+                        if (token != null) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => VerificationPage(token)));
+                        }
+                      }
+                    });
+                },
+                child: Text("Fortsett")),
           ),
           Divider(),
           Container(

@@ -37,6 +37,14 @@ class _SurveyAnswerPageState extends State<SurveyAnswerPage> {
               TextSpan(text: "${widget.survey.points}p")
             ],
           )),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.arrow_back)),
+          ),
           /* Column(
             children: [
               Container(

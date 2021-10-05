@@ -1,3 +1,6 @@
-final String serverScheme = "http";
-final int serverPort = 8000;
-final String serverUrl = "localhost";
+final bool dev = true;
+
+final String serverScheme = dev ? "http" : "http";
+final int? serverPort = dev ? 8000 : null;
+final String serverUrl = dev ? "localhost" : r"surveyplatform.net";
+final String basePath = "/api/v1";

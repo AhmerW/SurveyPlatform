@@ -22,9 +22,38 @@ from data.models import (
 from data.services.survey_service import SurveyService
 from routes.auth import authLogin
 
+# /gifts
 router = APIRouter()
 
 
 @router.get("/")
 async def getGifts():
+    pass
+
+
+@router.post("/")
+async def postGift():
+    pass
+
+
+@router.delete("/")
+async def deleteGift():
+    pass
+
+
+# /gifts/items
+
+
+@router.get("/items")
+async def getItems(gift_id: int):
+    pass
+
+
+@router.post("/items")
+async def postItems(gift_id: int):
+    pass
+
+
+@router.delete("/items")
+async def deleteItem(item_id: int):
     pass

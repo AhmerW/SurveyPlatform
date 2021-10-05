@@ -22,7 +22,7 @@ class _HomePageHeaderState extends State<HomePageHeader> {
       children: [
         Container(
           padding: EdgeInsets.only(
-            top: isLargeHeight ? 300 : 50,
+            top: isLargeHeight ? 250 : 60,
           ),
           child: Center(
             child: Column(
@@ -34,27 +34,27 @@ class _HomePageHeaderState extends State<HomePageHeader> {
                   child: Container(
                     alignment: Alignment.center,
                     child: TitleText(
-                        "Bli belønnet for å svare på spørreundersøkelser"),
+                        "Bli betalt for å svare på spørreundersøkelser"),
                   ),
                 ),
                 Container(
                   height: 20,
                 ),
-                Material(
-                  color: HomePage.backgroundColor,
-                  elevation: 20,
-                  child: Container(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => LoginPage()));
-                      },
-                      child: Text("Begynn nå"),
+                Container(
+                  height: 50,
+                  child: Material(
+                    color: HomePage.backgroundColor,
+                    elevation: 20,
+                    child: Container(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => LoginPage()));
+                        },
+                        child: Text("Begynn nå"),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 10,
                 ),
               ],
             ),
@@ -64,13 +64,12 @@ class _HomePageHeaderState extends State<HomePageHeader> {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.5,
             child: Divider(
-              color: Colors.orange,
+              color: HomePage.primaryColor,
             ),
           ),
         ),
         Container(
-          height: MediaQuery.of(context).size.height *
-              (isEnoughRemaining ? 0.5 : 0.7),
+          height: MediaQuery.of(context).size.height * 0.50,
           child: Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.only(bottom: 100),
@@ -78,10 +77,10 @@ class _HomePageHeaderState extends State<HomePageHeader> {
               iconSize: 50,
               onPressed: () {
                 widget._controller
-                    .scrollTo(index: 2, duration: Duration(seconds: 1));
+                    .scrollTo(index: 2, duration: Duration(milliseconds: 350));
               },
               icon: Icon(Icons.arrow_drop_down_circle_outlined),
-              color: Colors.orange,
+              color: HomePage.primaryColor,
             ),
           ),
         ),

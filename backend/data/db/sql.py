@@ -74,11 +74,21 @@ table_queries: Final[List[str]] = [
     CREATE TABLE IF NOT EXISTS Gifts
     (
         gift_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        uid INTEGER
+        uid INTEGER,
         price INTEGER NOT NULL,
         title TEXT NOT NULL,
         description TEXT,
         FOREIGN KEY(uid) REFERENCES Users(uid)
+    )
+    """,
+    """ 
+    CREATE TABLE IF NOT EXISTS GiftStock 
+    (
+        item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        value TEXT NOT NULL,
+        claimed_by INTEGER,
+        claimed BOOLEAN DEFAULT False,
+        FOREIGN KEY(claimed_by) REFERENCES Users(uid)
     )
     """,
 ]

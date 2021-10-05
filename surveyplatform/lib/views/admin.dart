@@ -6,6 +6,13 @@ import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/surveys/survey_create.dart';
 import 'package:surveyplatform/widgets/funcs.dart';
 
+class AdminPageButton {
+  final String title;
+  final int create;
+
+  AdminPageButton(this.title, this.create);
+}
+
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
 
@@ -14,12 +21,14 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  final List<AdminPageButton> _adminPageButtons = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: HomePage.backgroundColor,
         appBar: AppBar(
-          backgroundColor: HomePage.darkBackgroundnColor,
+          backgroundColor: HomePage.darkBackgroundColor,
           title: Text("Admin panel",
               style: GoogleFonts.merriweather(color: Colors.white)),
         ),
@@ -48,17 +57,18 @@ class _AdminPageState extends State<AdminPage> {
                 CustomDivider(),
                 Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SimpleButton(
-                          "Lag en ny spørreundersøkelse",
-                          () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => SurveyCreatePage())))
-                    ],
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: _adminPageButtons
+                          .map(
+                            (btn) => Container(
+                              child: SimpleButton(
+                                btn.title,
+                                () {},
+                              ),
+                            ),
+                          )
+                          .toList()),
                 ),
               ],
             );

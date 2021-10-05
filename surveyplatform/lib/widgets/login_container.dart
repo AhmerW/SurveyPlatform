@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/hub.dart';
 import 'package:surveyplatform/views/register.dart';
 import 'package:surveyplatform/widgets/lfield.dart';
@@ -43,14 +44,14 @@ class _LoginContainerState extends State<LoginContainer> {
                 onPressed: () {},
                 icon: Icon(
                   Icons.home,
-                  color: Colors.orange,
+                  color: HomePage.primaryColor,
                 )),
           ), */
           Container(
             padding: EdgeInsets.zero,
             margin: EdgeInsets.zero,
             child: Divider(
-              color: Colors.orange,
+              color: HomePage.primaryColor,
             ),
           ),
           Container(
@@ -59,7 +60,7 @@ class _LoginContainerState extends State<LoginContainer> {
             ),
             child: Text(
               "SurveyPlatform",
-              style: TextStyle(color: Colors.orange[400]),
+              style: TextStyle(color: HomePage.primaryColor),
             ),
           ),
           Container(
@@ -109,9 +110,10 @@ class _LoginContainerState extends State<LoginContainer> {
             padding: EdgeInsets.symmetric(
               vertical: 20,
             ),
-            width: MediaQuery.of(context).size.width * 0.15,
+            height: 70,
+            width: MediaQuery.of(context).size.width * 0.2,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.orange[400]),
+              style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
               onPressed: () {
                 String username = _usernameController.text;
                 String password = _passwdController.text;
@@ -127,7 +129,7 @@ class _LoginContainerState extends State<LoginContainer> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Login"), Icon(Icons.login)],
+                children: [Text("Logg inn"), Icon(Icons.login)],
               ),
             ),
           ),
@@ -152,7 +154,7 @@ class _LoginContainerState extends State<LoginContainer> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Log inn som gjest",
+                    "Logg inn som gjest",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
@@ -192,7 +194,7 @@ class _LoginContainerState extends State<LoginContainer> {
 
           // END DIVIDER
           Divider(
-            color: Colors.orange,
+            color: HomePage.primaryColor,
           )
         ],
       ),

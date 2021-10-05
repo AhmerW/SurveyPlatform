@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:surveyplatform/views/home.dart';
 
 class CustomDivider extends StatelessWidget {
   const CustomDivider({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class CustomDivider extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
       child: Divider(
-        color: Colors.orange,
+        color: HomePage.primaryColor,
       ),
     );
   }

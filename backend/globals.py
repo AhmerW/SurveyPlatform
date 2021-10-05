@@ -1,3 +1,4 @@
+from logging import root
 import os
 import dotenv
 from typing import Final, List
@@ -6,9 +7,11 @@ from passlib.context import CryptContext
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+DEV: Final[bool] = True
+base_path: Final[str] = "/api/v1"
 
 project = "SurveyPlatform"
-app = FastAPI()
+app = FastAPI(root_path=None if DEV else base_path)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

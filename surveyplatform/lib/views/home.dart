@@ -4,10 +4,12 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:surveyplatform/main.dart';
 
 import 'package:surveyplatform/views/login.dart';
+import 'package:surveyplatform/views/register.dart';
 import 'package:surveyplatform/views/tos.dart';
 import 'package:surveyplatform/widgets/dialogs/about_dialog.dart';
 import 'package:surveyplatform/widgets/dialogs/rewards_dialog.dart';
 import 'package:surveyplatform/widgets/home/body_container.dart';
+import 'package:surveyplatform/widgets/home/faq_container.dart';
 import 'package:surveyplatform/widgets/home/header_container.dart';
 
 Widget navButton(
@@ -25,9 +27,20 @@ Widget navButton(
   );
 }
 
+Widget drawerListTile(String content, void Function() onPressed) {
+  return ListTile(
+    onTap: onPressed,
+    title: Text(content,
+        style: GoogleFonts.merriweather(
+            color: Colors.white, fontWeight: FontWeight.bold)),
+  );
+}
+
 class HomePage extends StatefulWidget {
-  static const backgroundColor = Color(0xFF386C8C);
-  static const darkBackgroundnColor = Color(0xFF1B2B38);
+  static const backgroundColor = Color(0xFF384955);
+  static const darkBackgroundColor = Color(0xFF24292e);
+  static const primaryColor = Color(0xFFe99a27);
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -35,6 +48,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   ItemScrollController _controller = ItemScrollController();
   ItemPositionsListener _listener = ItemPositionsListener.create();
 
@@ -54,63 +69,145 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> content = [
+    bool isSmallWidth = MediaQuery.of(context).size.width <= 962;
+    bool isVerySmallWidth = MediaQuery.of(context).size.width <= 732;
+
+    Image logo = Image.asset(
+      "logotext.png",
+      fit: BoxFit.cover,
+    );
+
+    final List<Widget> content = [
       HomePageHeader(_controller),
       HomePageBody(),
-      Footer(HomePage.backgroundColor)
+      FAQContainer()
     ];
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: appBarElevation,
-        backgroundColor: Color(0xFF4683A6),
-        title: Image.asset(
-          "logotext.png",
-          fit: BoxFit.cover,
-        ),
-        actions: [
-          Container(
-            padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width * 0.5,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                navButton("OM", () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => PageAboutDialog());
-                }),
-                navButton("BELØNNINGER", () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => PageRewardsDialog());
-                }),
-                navButton("VILKÅR", () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => TOSPage()));
-                })
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  24,
+        backgroundColor: HomePage.backgroundColor,
+        centerTitle: true,
+        leading: !isSmallWidth
+            ? SizedBox.shrink()
+            : Builder(builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                );
+              }),
+        title: isSmallWidth
+            ? logo
+            : Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    logo,
+                    Spacer(),
+                    navButton("OM", () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => PageAboutDialog());
+                    }),
+                    navButton("BELØNNINGER", () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => PageRewardsDialog());
+                    }),
+                    navButton("VILKÅR", () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => TOSPage()));
+                    }),
+                    Spacer(),
+                  ],
                 ),
-                color: Colors.transparent),
-            margin: EdgeInsets.all(5),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => LoginPage()));
-              },
-              child: Icon(Icons.login),
-            ),
-          )
+              ),
+        actions: [
+          !isVerySmallWidth
+              ? Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => LoginPage()));
+                            },
+                            child: Text("Logg inn")),
+                      ),
+                      Container(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => RegisterPage()));
+                            },
+                            child: Text("Lag konto")),
+                      )
+                    ],
+                  ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
-      backgroundColor: Color(0xFF4683A6),
+      backgroundColor: HomePage.backgroundColor,
+      drawer: Drawer(
+        key: _key,
+        child: Container(
+          color: HomePage.darkBackgroundColor,
+          child: ListView(
+            children: [
+              drawerListTile("Om oss", () {
+                showDialog(
+                    context: context, builder: (context) => PageAboutDialog());
+              }),
+              drawerListTile("Belønninger", () {
+                showDialog(
+                    context: context,
+                    builder: (context) => PageRewardsDialog());
+              }),
+              drawerListTile("Vilkår og betingelser", () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => TOSPage()));
+              }),
+              isVerySmallWidth
+                  ? Container(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => LoginPage()));
+                                },
+                                child: Text("Logg inn")),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => RegisterPage()));
+                                },
+                                child: Text("Lag konto")),
+                          )
+                        ],
+                      ),
+                    )
+                  : SizedBox.shrink(),
+            ],
+          ),
+        ),
+      ),
       body: ScrollablePositionedList.builder(
         itemScrollController: _controller,
         itemPositionsListener: _listener,
