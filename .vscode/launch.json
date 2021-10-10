@@ -9,8 +9,9 @@
             "cwd": "surveyplatform",
             "request": "launch",
             "type": "dart",
-            "deviceId": "chrome",
-            "flutterMode": "debug"
+            "deviceId": "windows",
+            "flutterMode": "debug",
+            "program": "lib/main.dart"
         },
     ]
 }

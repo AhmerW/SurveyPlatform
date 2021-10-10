@@ -19,6 +19,7 @@ class ValueModel(BaseModel):
 
 class User(BaseModel):
     uid: Optional[int] = None
+    points: Optional[int] = None
     username: str
     email: str
     verified: bool
@@ -118,6 +119,7 @@ class Gift(BaseModel):
 class GiftOut(Gift):
     uid: int  # created by
     gift_id: int
+    item_count: Optional[int] = 0
 
 
 class Item(BaseModel):
@@ -125,6 +127,7 @@ class Item(BaseModel):
 
 
 class ItemOut(Item):
+    gift_id: int
     item_id: int
     claimed: Optional[bool] = False
     claimed_by: Optional[int] = None

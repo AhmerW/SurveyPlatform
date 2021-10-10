@@ -70,7 +70,8 @@ table_queries: Final[List[str]] = [
         FOREIGN KEY(answer_id) REFERENCES SurveyAnswers(answer_id)
     )
     """,
-    """
+    # UID: Gift author
+    """ 
     CREATE TABLE IF NOT EXISTS Gifts
     (
         gift_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,12 +83,14 @@ table_queries: Final[List[str]] = [
     )
     """,
     """ 
-    CREATE TABLE IF NOT EXISTS GiftStock 
+    CREATE TABLE IF NOT EXISTS GiftItems
     (
         item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        gift_id INTEGER,
         value TEXT NOT NULL,
         claimed_by INTEGER,
         claimed BOOLEAN DEFAULT False,
+        FOREIGN KEY(gift_id) REFERENCES Gifts(gift_id),
         FOREIGN KEY(claimed_by) REFERENCES Users(uid)
     )
     """,

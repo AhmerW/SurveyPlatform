@@ -110,8 +110,8 @@ class _LoginContainerState extends State<LoginContainer> {
             padding: EdgeInsets.symmetric(
               vertical: 20,
             ),
-            height: 70,
-            width: MediaQuery.of(context).size.width * 0.2,
+            height: 80,
+            width: MediaQuery.of(context).size.width * 0.4,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
               onPressed: () {
@@ -128,6 +128,7 @@ class _LoginContainerState extends State<LoginContainer> {
                 }
               },
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [Text("Logg inn"), Icon(Icons.login)],
               ),
@@ -175,7 +176,7 @@ class _LoginContainerState extends State<LoginContainer> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
                     "Har ikke konto?",

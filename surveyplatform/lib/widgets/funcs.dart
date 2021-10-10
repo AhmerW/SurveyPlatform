@@ -94,6 +94,7 @@ class SimpleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
       child: Text(
         content,
         style: GoogleFonts.merriweather(

@@ -14,7 +14,7 @@ class FAQContainer extends StatelessWidget {
           Container(
             alignment: Alignment.center,
             child: Text(
-              "FAQ",
+              "Spørsmål & Svar",
               style: GoogleFonts.merriweather(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

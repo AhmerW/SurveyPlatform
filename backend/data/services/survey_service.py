@@ -5,7 +5,7 @@ import json
 from data.db.queries import QuestionQueries, SurveyQueries
 from data.services.base import BaseService
 from data.models import OptionalSurveyID, QuestionOut, Survey, SurveyIn, SurveyOut
-from data.services.pagination import getOffsetLimitFromPage, page_count
+from data.services.pagination import getOffsetLimitFromPage, page_count, paginateList
 from data.services.question_service import questionFromDict
 
 
@@ -101,7 +101,6 @@ class SurveyService(BaseService):
         self,
         page: int = 1,
     ) -> List[Survey]:
-        offset, limit = getOffsetLimitFromPage(page)
 
         if not self._surveys:
             await self.refreshSurveysCache(
@@ -109,20 +108,20 @@ class SurveyService(BaseService):
                 query=SurveyQueries.GetAllVisibleSurveys,
             )
 
-        return self._surveys[offset:limit]
+        return paginateList(self._surveys, page)
 
     async def getSurveyDrafts(
         self,
         page: int = 1,
     ) -> List[Survey]:
-        offset, limit = getOffsetLimitFromPage(page)
+
         if not self._drafts:
             await self.refreshSurveysCache(
                 attr="_drafts",
                 query=SurveyQueries.GetAllSurveyDrafts,
             )
 
-        return self._drafts[offset:limit]
+        return paginateList(self._drafts, page)
 
     async def refreshSurveysCache(
         self,

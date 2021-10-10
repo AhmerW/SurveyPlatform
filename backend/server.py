@@ -11,12 +11,14 @@ from data.db import sql
 from routes.survey.router_drafts import router as drafts_router
 from routes.answer.router import router as answer_router
 from routes.survey.router import router as survey_router
+from routes.gift.router import router as gift_router
 from routes.user.router import router as user_router
 from routes.auth import router as auth_router
 
 
 @app.route(base_path)
 async def home(_):
+    print([{"path": route.path, "name": route.name} for route in app.routes])
     return Success()
 
 
@@ -46,6 +48,10 @@ routes: List[Route] = [
     Route(
         "answers",
         answer_router,
+    ),
+    Route(
+        "gifts",
+        gift_router,
     ),
 ]
 

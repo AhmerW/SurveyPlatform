@@ -6,6 +6,7 @@ import 'package:surveyplatform/data/states/survey_create_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/views/admin.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/hub.dart';
 import 'package:surveyplatform/views/surveys/question_list.dart';
 import 'package:surveyplatform/views/surveys/widget_list.dart';
@@ -54,7 +55,9 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: HomePage.backgroundColor,
         appBar: AppBar(
+          backgroundColor: HomePage.darkBackgroundColor,
           centerTitle: true,
           title: Container(
             constraints: BoxConstraints(
@@ -122,7 +125,7 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
                   ),
                   Divider(),
                   Container(
-                    height: 20,
+                    height: 30,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

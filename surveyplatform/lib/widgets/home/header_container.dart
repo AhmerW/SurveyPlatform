@@ -77,7 +77,7 @@ class _HomePageHeaderState extends State<HomePageHeader> {
               iconSize: 50,
               onPressed: () {
                 widget._controller
-                    .scrollTo(index: 2, duration: Duration(milliseconds: 350));
+                    .scrollTo(index: 1, duration: Duration(milliseconds: 350));
               },
               icon: Icon(Icons.arrow_drop_down_circle_outlined),
               color: HomePage.primaryColor,

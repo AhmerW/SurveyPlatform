@@ -11,6 +11,7 @@ import 'package:surveyplatform/widgets/dialogs/rewards_dialog.dart';
 import 'package:surveyplatform/widgets/home/body_container.dart';
 import 'package:surveyplatform/widgets/home/faq_container.dart';
 import 'package:surveyplatform/widgets/home/header_container.dart';
+import 'package:surveyplatform/widgets/image_text.dart';
 
 Widget navButton(
   String content,
@@ -73,13 +74,29 @@ class _HomePageState extends State<HomePage> {
     bool isVerySmallWidth = MediaQuery.of(context).size.width <= 732;
 
     Image logo = Image.asset(
-      "logotext.png",
+      "assets/logotext.png",
       fit: BoxFit.cover,
     );
 
     final List<Widget> content = [
       HomePageHeader(_controller),
       HomePageBody(),
+      Column(
+        children: [
+          ImageText(true,
+              image: "assets/stock1-t.png",
+              title: "Lyst på forte penger?",
+              text:
+                  "Det skal gå fort å svare på våre undersøkelser.\nSamtidig sørger vi får at dere får så mye ut av det."),
+          ImageText(
+            false,
+            image: "assets/stock2.jpg",
+            title: "Hjelper dere så mye som mulig",
+            text:
+                "Våre undersøkelser gir oss ett godt inblikk over markedet.\nDet betyr at ditt svar vil ha ett stort innvirkning på samfunnet!",
+          )
+        ],
+      ),
       FAQContainer()
     ];
 

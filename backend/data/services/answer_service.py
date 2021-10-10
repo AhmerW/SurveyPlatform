@@ -33,5 +33,5 @@ class AnswerService(BaseService):
         return row
 
     async def existsSurvey(self, survey_id: int):
-        service = SurveyService(self.getCon())
+        service = SurveyService(self.con)
         return (await service.getSurvey(survey_id)) is not None

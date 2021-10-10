@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/question_state.dart';
 import 'package:surveyplatform/data/states/survey_create_state.dart';
 import 'package:surveyplatform/models/survey.dart';
+import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/widgets/surveys/widgets/base.dart';
 
 class QuestionWidget extends StatefulWidget {
@@ -24,7 +25,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         constraints: BoxConstraints(maxHeight: 500),
         height: 500,
         child: PhysicalModel(
-          color: Colors.white,
+          color: Color(0xFF93BFE0),
           elevation: 20,
           child: Container(
             padding: EdgeInsets.all(30),

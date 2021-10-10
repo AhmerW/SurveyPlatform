@@ -4,13 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/surveys/survey_create.dart';
+import 'package:surveyplatform/widgets/dialogs/gifts/gift_dialog.dart';
 import 'package:surveyplatform/widgets/funcs.dart';
+
+typedef void CallbackFn(BuildContext context);
 
 class AdminPageButton {
   final String title;
-  final int create;
+  final CallbackFn callback;
 
-  AdminPageButton(this.title, this.create);
+  AdminPageButton(this.title, this.callback);
 }
 
 class AdminPage extends StatefulWidget {
@@ -21,7 +24,18 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  final List<AdminPageButton> _adminPageButtons = [];
+  final List<AdminPageButton> _adminPageButtons = [
+    AdminPageButton(
+        "Lag en ny spørreundersøkelse",
+        (BuildContext context) => Navigator.push(
+            context, MaterialPageRoute(builder: (_) => SurveyCreatePage()))),
+    AdminPageButton("Administrer gaver", (context) {
+      showDialog(
+        context: context,
+        builder: (context) => GiftDialog(),
+      );
+    })
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +76,14 @@ class _AdminPageState extends State<AdminPage> {
                       children: _adminPageButtons
                           .map(
                             (btn) => Container(
+                              padding: EdgeInsets.symmetric(vertical: 50),
+                              height:
+                                  (MediaQuery.of(context).size.height * 0.7) /
+                                      _adminPageButtons.length,
+                              width: MediaQuery.of(context).size.width * 0.6,
                               child: SimpleButton(
                                 btn.title,
-                                () {},
+                                () => btn.callback(context),
                               ),
                             ),
                           )

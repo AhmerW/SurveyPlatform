@@ -111,7 +111,10 @@ class _SurveyListState extends State<SurveyList> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
-                                  )
+                                  ),
+                                  Spacer(),
+                                  OutlinedButton(
+                                      onPressed: () {}, child: Text("Svar"))
                                 ],
                               ),
                             )

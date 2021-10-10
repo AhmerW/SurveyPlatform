@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/survey_create_state.dart';
 import 'package:surveyplatform/models/survey.dart';
+import 'package:surveyplatform/views/home.dart';
 
 import 'package:surveyplatform/widgets/surveys/widgets/base.dart';
 import 'package:surveyplatform/widgets/surveys/widgets/slider.dart';
@@ -24,7 +25,7 @@ class _SurveyCreateSurveyWidgetListState
         return Column(
           children: [
             PhysicalModel(
-              color: Colors.white,
+              color: Color(0xFF93BFE0),
               elevation: 20,
               child: ListTile(
                 title: Text(item),

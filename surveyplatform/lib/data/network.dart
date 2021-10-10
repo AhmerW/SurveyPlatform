@@ -74,10 +74,14 @@ Future<ServerResponse> sendServerRequestAuthenticated(
   Map<String, String> cheaders = Map.from(headers ?? {});
   cheaders["Authorization"] = "bearer ${token}";
 
-  return await sendRequest(requestType, serverUrl,
-      path: path,
-      scheme: serverScheme,
-      queryParams: queryParams,
-      headers: cheaders,
-      data: data);
+  return await sendRequest(
+    requestType,
+    serverUrl,
+    path: "$basePath$path",
+    scheme: serverScheme,
+    queryParams: queryParams,
+    headers: cheaders,
+    port: serverPort,
+    data: data,
+  );
 }

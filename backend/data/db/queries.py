@@ -73,8 +73,46 @@ class AnswerQueries:
 
 class GiftQueries:
     CreateGift = """
-        INSERT INTO Gifts(price, title, description) VALUES(?, ?, ?);
+        INSERT INTO Gifts(uid, price, title, description) VALUES(?, ?, ?, ?);
     """
-    GetGiftById = """
+    GetGift = """
         SELECT * FROM Gifts WHERE Gifts.gift_id = ?;
+    """
+    GetGifts = """
+        SELECT Gifts.gift_id, uid, price, title, description, COUNT(*) as item_count
+        FROM Gifts 
+        INNER JOIN GiftItems on GiftItems.gift_id = Gifts.gift_id;
+    """
+    DeleteGift = """
+        DELETE FROM Gifts WHERE Gifts.gift_id = ?;
+    """
+
+    GetGiftItems = """
+        SELECT * FROM GiftItems WHERE GiftItems.gift_id = ?;
+    """
+    GetGiftItem = """
+        SELECT * FROM GiftItems WHERE GiftItems.item_id = ?;
+    """
+    GetUnclaimedGiftItems = """
+        SELECT * FROM GiftItems WHERE GiftItems.gift_id = ? and GiftItems.claimed = false;
+    """
+    GetClaimedGiftItems = """
+        SELECT * FROM GiftItems WHERE GiftItems.gift_id = ? and GiftItems.claimed = true;
+    """
+
+    AddGiftItem = """
+        INSERT INTO GiftItems(gift_id, value) VALUES (?, ?);
+    """
+
+    DeleteGiftItem = """
+        DELETE FROM GiftItems where GiftItems.item_id = ?;
+    """
+    DeleteGiftItems = """
+        DELETE FROM GiftItems WHERE GiftItems.gift_id = ? AND GiftItems.claimed = false;
+    """
+    ClaimGiftItem = """
+        UPDATE GiftItems SET claimed = true, claimed_by = ? WHERE GiftItems.item_id = ?;
+    """
+    GetGiftItemsCount = """
+        SELECT COUNT(*) from GiftItems WHERE GiftItems.gift_id = ?;
     """

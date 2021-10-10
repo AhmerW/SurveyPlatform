@@ -22,51 +22,58 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     bool smallHeight = MediaQuery.of(context).size.height < 650;
+    bool smallWidthForRow = MediaQuery.of(context).size.width < 800;
     return Scaffold(
-      backgroundColor: HomePage.backgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
+        backgroundColor: HomePage.backgroundColor,
+        body: Row(
           children: [
-            smallHeight
+            smallWidthForRow
                 ? SizedBox.shrink()
-                : InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => HomePage()));
-                    },
+                : Flexible(
+                    flex: 3,
                     child: Container(
-                      alignment: Alignment.topLeft,
-                      child: Image.asset(
-                        "logo.png",
-                        fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width,
+                      color: Color(0xFF161D21),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(top: 40),
+                            child: Text(
+                              "Lag din SurveyPlatform konto",
+                              style: TextStyle(
+                                fontSize: 35,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-            Center(
-              child: Container(
-                padding: smallHeight ? EdgeInsets.only(top: 20) : null,
-                alignment: Alignment.topCenter,
+            Flexible(
+              flex: 7,
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    AnimatedOpacity(
-                      opacity: _welcomeVisible ? 1.0 : 0,
-                      duration: const Duration(seconds: 2),
-                      child: Text(
-                        "Lag din SurveyPlatform konto",
-                        style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.white,
+                    Center(
+                      child: Container(
+                        padding: smallHeight ? EdgeInsets.only(top: 20) : null,
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          "Lag din konto",
+                          style: TextStyle(
+                            fontSize: 35,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
+                    RegisterContainer(),
                   ],
                 ),
               ),
             ),
-            RegisterContainer(),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

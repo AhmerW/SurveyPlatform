@@ -1,5 +1,6 @@
 from typing import Any, Dict, Generic, Optional, TypeVar
 
+from dataclasses import dataclass
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -8,6 +9,20 @@ from fastapi.exceptions import RequestValidationError
 from pydantic.main import BaseModel
 
 from globals import app
+
+
+@dataclass(slots=True, frozen=True)
+class InternalServiceResponse:
+    success: Optional[bool] = False
+    msg: Optional[str] = ""
+    data: Optional[Any] = None
+
+
+def returnResponse(response: InternalServiceResponse):
+    if not response.success:
+        raise Error(msg=response.msg)
+
+    return Success(msg=response.msg)
 
 
 def Success(
@@ -92,9 +107,6 @@ async def validationErrorHandler(request, exc):
             "data": {},
         },
     )
-
-
-T = TypeVar("T")
 
 
 class BaseResponse(BaseModel):

@@ -37,7 +37,7 @@ class _HomePageState extends State<LoginPage> {
                     child: Container(
                       alignment: Alignment.topLeft,
                       child: Image.asset(
-                        "logo.png",
+                        "assets/logo.png",
                         fit: BoxFit.cover,
                       ),
                     ),

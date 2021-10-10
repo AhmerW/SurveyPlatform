@@ -58,37 +58,20 @@ class _RegisterContainerState extends State<RegisterContainer> {
           Container(
             height: 50,
           ),
-          LoginField("username", _usernameController),
+          LoginField("brukernavn", _usernameController),
           LoginField("email", _emailController),
           Container(
             height: 25,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 47,
-                child: LoginField(
-                  "password",
-                  _passwdController,
-                  hide: true,
-                  size: (MediaQuery.of(context).size.width * 0.4) / 2,
-                ),
-              ),
-              Flexible(
-                flex: 6,
-                child: Container(),
-              ),
-              Flexible(
-                flex: 47,
-                child: LoginField(
-                  "repeat password",
-                  _passwd2Controller,
-                  hide: true,
-                  size: (MediaQuery.of(context).size.width * 0.4) / 2,
-                ),
-              ),
-            ],
+          LoginField(
+            "passord",
+            _passwdController,
+            hide: true,
+          ),
+          LoginField(
+            "repeter passord",
+            _passwd2Controller,
+            hide: true,
           ),
           Divider(),
           Container(
@@ -159,7 +142,7 @@ class _RegisterContainerState extends State<RegisterContainer> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Log inn istedenfor",
+                    "Logg inn istedenfor",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,

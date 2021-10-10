@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/data/states/gift_state.dart';
 import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/data/states/survey_create_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/services/auth_service.dart';
+import 'package:surveyplatform/services/gift_service.dart';
 import 'package:surveyplatform/services/survey_service.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/login.dart';
@@ -18,6 +20,7 @@ GetIt locator = GetIt.instance;
 void main() {
   locator.registerLazySingleton<SurveyService>(() => SurveyService());
   locator.registerLazySingleton<AuthService>(() => AuthService());
+  locator.registerLazySingleton<GiftService>(() => GiftService());
 
   runApp(MultiProvider(
     providers: [
@@ -33,6 +36,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => SurveyAnswerState(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => GiftStateNotifier(),
       )
     ],
     child: SurveyPlatform(),
