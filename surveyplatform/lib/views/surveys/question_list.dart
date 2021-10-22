@@ -14,6 +14,14 @@ class QuestionList extends StatefulWidget {
 }
 
 class _QuestionListState extends State<QuestionList> {
+  final ScrollController _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<NewSurveyState>(
@@ -27,14 +35,26 @@ class _QuestionListState extends State<QuestionList> {
                   ),
                 ),
               )
-            : ListView.separated(
+            : ReorderableListView.builder(
+                scrollController: _controller,
+                scrollDirection: Axis.vertical,
                 itemCount: nss.questions.length,
                 itemBuilder: (context, index) {
                   QuestionState question = nss.questions[index];
-                  return QuestionWidget(question);
+
+                  return Container(
+                    key: Key('${question.position - 1}'),
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: QuestionWidget(question),
+                  );
                 },
-                separatorBuilder: (context, index) {
-                  return Divider();
+                onReorder: (oldIndex, newIndex) {
+                  if (oldIndex < newIndex) {
+                    oldIndex -= 1;
+                  }
+                  final QuestionState _qs = nss.questions.removeAt(oldIndex);
+                  _qs.question.position = newIndex + 1;
+                  nss.questions.insert(newIndex, _qs);
                 },
               );
       },

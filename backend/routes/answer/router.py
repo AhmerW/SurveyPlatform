@@ -32,9 +32,13 @@ async def postAnswer(
 ):
     print(user)
     async with AnswerService() as service:
-        survey_exists = await service.existsSurvey(answer.survey_id)
-        if not survey_exists:
+        ss = SurveyService(service.con)
+        survey = await ss.getSurvey(answer.survey_id)
+        if not survey:
             raise Error("Survey does not exist")
+
+        await service.validateAnswer(answer, survey)
+        # db call after validation
 
         exists = await service.existsAnswer(answer.survey_id, user.uid)
         if exists is not None:

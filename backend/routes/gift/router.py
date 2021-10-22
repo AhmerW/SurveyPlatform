@@ -68,16 +68,23 @@ async def getGifts(
     return GiftResponse(data=GiftValueModel(gifts=gifts))
 
 
-@router.post("/")
+@router.post("/", response_model=GiftResponse)
 async def createGift(
     gift: Gift,
     user: User = Depends(getAdmin),
 ):
+    go: GiftOut = None
 
     async with GiftService() as service:
-        await service.createGift(user.uid, gift)
+        go = await service.createGift(user.uid, gift)
 
-    return Success(detail="Gift has been created")
+    if go is not None:
+        return GiftResponse(
+            data=GiftValueModel(gifts=go),
+            detail="Gift has been created",
+        )
+
+    raise Error("Unexpected")
 
 
 @router.delete("/{gift_id}")
@@ -100,11 +107,16 @@ async def deleteGift(
 # /gifts/{gifft_id}/items
 
 ItemValueModel = ValueModel.new(items=(Union[List[ItemOut], ItemOut], ...))
+SingleItemModel = ValueModel.new(item=(ItemOut, ...))
 TotalValueModel = ValueModel.new(total=(int, ...))
 
 
 class ItemResponse(BaseResponse):
     data: ItemValueModel
+
+
+class SingleItemResponse(BaseResponse):
+    data: SingleItemModel
 
 
 class ItemOrValueResponse(BaseResponse):
@@ -145,23 +157,29 @@ async def getItems(
         else:  # _GetGiftItemsType.all
             items = await service.itemService.getAllItems(gift_id, page)
 
-    return ItemOrValueResponse(data=ItemValueModel(items=items))
+    return ItemOrValueResponse(detail="Item added", data=ItemValueModel(items=items))
 
 
-@router.post("/{gift_id}/items")
+@router.post(
+    "/{gift_id}/items",
+    response_model=SingleItemResponse,
+)
 async def postItems(
     gift_id: int,
     item: Item,
     user: User = Depends(getAdmin),
 ):
+    io: ItemOut = None
 
     async with GiftService() as service:
-        await service.itemService.addItem(
+        io = await service.itemService.addItem(
             gift_id,
             item,
         )
+    if io is None:
+        raise Error("Unexpected null value")
 
-    return Success(detail="Item has been added")
+    return SingleItemResponse(data=SingleItemModel(item=io))
 
 
 @router.delete("/{gift_id}/items/{item_id}")
@@ -178,7 +196,7 @@ async def deleteItem(
             background_task,
         )
 
-    return Success("Item has been deleted")
+    return Success(detail="Item has been deleted")
 
 
 @router.post("/{gift_id}/items/{item_id}/claims", response_model=ItemResponse)

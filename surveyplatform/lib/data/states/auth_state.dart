@@ -16,6 +16,9 @@ User getGuest() => User(guestID, "gjest", verified: true);
 
 enum AuthLoginState { None, Attempting, EmptyData, Failed, Success }
 
+String getToken(BuildContext context) =>
+    Provider.of<AuthStateNotifier>(context, listen: false).token;
+
 class AuthStateNotifier extends ChangeNotifier {
   User _user = getGuest();
   bool _session = false;

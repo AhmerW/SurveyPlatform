@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class Question {
   static int invalidID = 0;
 
-  final int? questionID;
+  final int questionID;
   int position;
   int page;
 
@@ -13,13 +13,11 @@ class Question {
   final Map<String, dynamic> widget_values;
 
   bool get isValid =>
-      questionID == invalidID ||
-      widget.isEmpty ||
-      page == invalidID ||
-      position == invalidID;
+      questionID != invalidID && widget.isNotEmpty && page != invalidID ||
+      position != invalidID;
 
   Question({
-    this.questionID,
+    required this.questionID,
     required this.text,
     required this.position,
     required this.widget,
@@ -34,7 +32,7 @@ class Question {
       text: json["text"] ?? "",
       position: json["position"] ?? 0,
       widget: json["widget"] ?? "",
-      widget_values: json["widget_values"],
+      widget_values: json["widget_values"] ?? {},
     );
   }
   Map<String, dynamic> toJson() {
@@ -50,19 +48,19 @@ class Question {
 
 class Survey {
   static int invalidID = 0;
-  final int surveyid;
-  final bool draft;
+  final int surveyID;
+  bool draft;
 
   List<Question> questions;
 
   final String title;
   final int points;
 
-  bool get isValid => surveyid != 0;
+  bool get isValid => surveyID != 0;
 
   Survey(
-    this.surveyid, {
-    this.draft = false,
+    this.surveyID, {
+    this.draft: false,
     required this.title,
     required this.questions,
     required this.points,
@@ -74,7 +72,7 @@ class Survey {
       questions = [];
     }
 
-    return Survey(
+    var survey = Survey(
       json["survey_id"] ?? 0,
       title: json["title"] ?? "",
       points: json["points"] ?? 0,
@@ -85,14 +83,19 @@ class Survey {
           .toList()
         ..removeWhere((question) => !question.isValid),
     );
+    print("SURVEY QUESTIONS: ${survey.questions}");
+    print("TRY PARSE SQ: ${questions.map((e) => Question.fromJson(e))}");
+    return survey;
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "survey_id": surveyid,
+    var j = {
+      "survey_id": surveyID,
       "title": title,
       "points": points,
       "questions": questions.map((question) => question.toJson()).toList()
     };
+    print("JSON: $j");
+    return j;
   }
 }

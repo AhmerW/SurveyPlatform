@@ -65,13 +65,19 @@ async def createSurvey(
 
 
 @router.delete(
-    "/",
+    "/{surveyid}",
 )
 async def deleteSurvey(
     surveyid: int,
+    survey: Survey,
     user: User = Depends(getAdmin),
 ):
     async with SurveyService() as service:
         await service.delete(surveyid)
 
     return Success(detail="If there was a survey with that id, it has been deleted.")
+
+
+@router.patch("/{surveyid}")
+async def patchSurvey(surveyid: int, user: User = Depends(getAdmin)):
+    pass

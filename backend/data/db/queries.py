@@ -79,9 +79,9 @@ class GiftQueries:
         SELECT * FROM Gifts WHERE Gifts.gift_id = ?;
     """
     GetGifts = """
-        SELECT Gifts.gift_id, uid, price, title, description, COUNT(*) as item_count
-        FROM Gifts 
-        INNER JOIN GiftItems on GiftItems.gift_id = Gifts.gift_id;
+        SELECT g.*, count(*) AS count 
+        FROM Gifts AS g left join GiftItems AS i
+        ON g.gift_id = i.gift_id GROUP BY g.gift_id
     """
     DeleteGift = """
         DELETE FROM Gifts WHERE Gifts.gift_id = ?;

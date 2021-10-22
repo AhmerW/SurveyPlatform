@@ -29,6 +29,9 @@ class _LoginFieldState extends State<LoginField> {
         enableSuggestions: !widget.hide,
         obscureText: widget.hide,
         autocorrect: !widget.hide,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }

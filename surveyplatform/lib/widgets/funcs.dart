@@ -95,11 +95,14 @@ class SimpleButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
-      child: Text(
-        content,
-        style: GoogleFonts.merriweather(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
+      child: Container(
+        child: Text(
+          content,
+          style: GoogleFonts.merriweather(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
         ),
       ),
     );

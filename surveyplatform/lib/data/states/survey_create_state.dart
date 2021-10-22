@@ -27,7 +27,6 @@ class NewSurveyState extends ChangeNotifier {
 
   int get points => _points;
   void setPoints(int points) {
-    print(points);
     _points = points;
     notifyListeners();
   }
@@ -42,7 +41,7 @@ class NewSurveyState extends ChangeNotifier {
 
   Survey asSurvey({bool draft: false}) {
     print("as survey");
-    print(qs.questions.map((e) => e.question.toJson()).toList());
+
     return Survey(_updateID,
         title: title,
         questions: qs.questions.map((qs) => qs.question).toList(),
@@ -56,7 +55,7 @@ class NewSurveyState extends ChangeNotifier {
   }
 
   void removeQuestion(int position) {
-    qs.removeQuestion(position);
+    qs.removeQuestion(position - 1);
 
     notifyListeners();
   }
@@ -65,8 +64,10 @@ class NewSurveyState extends ChangeNotifier {
     return await postSurvey(context, draft: true);
   }
 
-  Future<ServerResponse> postSurvey(BuildContext context,
-      {bool draft: false}) async {
+  Future<ServerResponse> postSurvey(
+    BuildContext context, {
+    bool draft: false,
+  }) async {
     Survey survey = asSurvey(draft: draft);
     var response = await Provider.of<SurveyStateNotifier>(
       context,
@@ -109,7 +110,7 @@ class NewSurveyQuestionState {
   }
 
   void removeQuestion(int index) {
-    _questions.removeAt(index - 1);
+    _questions.removeAt(index);
     _questions
         .forEach((question) => question.setPosition(question.position - 1));
   }

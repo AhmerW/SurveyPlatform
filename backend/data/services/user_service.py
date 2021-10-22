@@ -8,12 +8,23 @@ from pydantic.main import BaseModel
 
 from data.db.queries import UserQueries
 from data.models import User, UserFull
-from data.services.base import BaseService
+from data.services.base import BaseService, StateContainer
 
 from globals import pwd_ctx
 
 
+class UserStateContainer(StateContainer):
+    ...
+
+
 class UserService(BaseService):
+    _state = UserStateContainer()
+
+    @classmethod
+    @property
+    def state(cls) -> UserStateContainer:
+        return cls._state
+
     async def __aenter__(self) -> "UserService":
         return await super().__aenter__()
 

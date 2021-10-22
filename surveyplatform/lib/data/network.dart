@@ -21,9 +21,7 @@ Future<ServerResponse> sendRequest(
   Object? data,
 }) async {
   final client = http.Client();
-  if (!path.endsWith("/")) {
-    path = "$path/";
-  }
+
   Uri url = Uri(
     scheme: scheme,
     host: host,
@@ -33,17 +31,23 @@ Future<ServerResponse> sendRequest(
   );
   print(url);
 
-  late var response;
+  late http.Response response;
   if (requestType == RequestType.Post) {
-    print("DATA: $data AND HEADERS $headers");
     response = await client.post(url, body: data, headers: headers);
-    print("post response");
   } else if (requestType == RequestType.Delete) {
     response = await client.delete(url, body: data, headers: headers);
   } else {
     response = await client.get(url, headers: headers);
   }
 
+  if (response.statusCode == 307) {
+    return ServerResponse.fromResponse(
+      http.Response(
+        '{"ok": false, "error": {"msg": "not found"}, "detail": "error", "data": {}}',
+        404,
+      ),
+    );
+  }
   return ServerResponse.fromResponse(response);
 }
 

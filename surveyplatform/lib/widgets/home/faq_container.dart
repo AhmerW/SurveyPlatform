@@ -22,6 +22,17 @@ class FAQContainer extends StatelessWidget {
               ),
             ),
           ),
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 100),
+                child: Center(
+                  child: Text("Kommer snart..",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );

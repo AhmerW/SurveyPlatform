@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:surveyplatform/data/states/question_state.dart';
 import 'package:surveyplatform/widgets/field.dart';
 import 'package:surveyplatform/widgets/surveys/widgets/value_field.dart';
@@ -54,10 +55,6 @@ class _OpenEndedWidgetState extends State<OpenEndedWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          decoration: InputDecoration(hintText: "$_hint"),
-          maxLength: _maxChars,
-        ),
         Divider(),
         SingleValueField(
           "Hint tekst",
@@ -85,6 +82,24 @@ class _OpenEndedWidgetState extends State<OpenEndedWidget> {
           },
           onSubmit: (value) => setMaxchars(int.parse(value)),
         ),
+        Container(
+          alignment: Alignment.bottomLeft,
+          child: TextButton(
+            onPressed: () => showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: Text("Forhåndsvisning"),
+                      content: TextField(
+                        maxLength: _maxChars,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        decoration: InputDecoration(
+                          hintText: _hint,
+                        ),
+                      ),
+                    )),
+            child: Text("Forhåndsvis"),
+          ),
+        )
       ],
     );
   }

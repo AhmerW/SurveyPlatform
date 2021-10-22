@@ -29,6 +29,10 @@ class UserInfoDialog extends StatelessWidget {
             ),
           ),
           Container(
+            alignment: Alignment.centerLeft,
+            child: Text("Poeng: ${asn.user.points}"),
+          ),
+          Container(
             padding: EdgeInsets.only(top: 20),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -38,7 +42,7 @@ class UserInfoDialog extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Logout",
+                    "Logg ut",
                   ),
                   Icon(Icons.logout),
                 ],

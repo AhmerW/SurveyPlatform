@@ -39,7 +39,7 @@ class ServerResponse {
   });
 
   factory ServerResponse.parse(Map<dynamic, dynamic> json, int statusCode) {
-    print("PARSING RESPONSE $json");
+    ;
     var data = json['data'];
     var error = json['error'];
     var detail = json['string'] ?? "";
@@ -58,7 +58,6 @@ class ServerResponse {
       status = 200;
     }
 
-    print("PARSED RESPONSE");
     return ServerResponse(
       data as Map<String, dynamic>,
       detail: detail,
@@ -69,7 +68,6 @@ class ServerResponse {
   }
 
   factory ServerResponse.fromResponse(http.Response response) {
-    print("GOT RESPONSE !");
     Map<dynamic, dynamic> json = jsonDecode(response.body);
 
     return ServerResponse.parse(json, response.statusCode);

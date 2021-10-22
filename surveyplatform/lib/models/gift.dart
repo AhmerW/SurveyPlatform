@@ -23,21 +23,26 @@ class Gift {
 
 class Item {
   final String value;
+  final int itemID;
   final int giftID;
   final bool claimed;
   final int? claimedBy;
 
   Item(
     this.value, {
+    required this.itemID,
     required this.giftID,
     required this.claimed,
     this.claimedBy,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(json["value"],
-        giftID: json["gift_id"],
-        claimed: json["claimed"],
-        claimedBy: json["claimed_by"]);
+    return Item(
+      json["value"],
+      itemID: json["item_id"],
+      giftID: json["gift_id"],
+      claimed: json["claimed"],
+      claimedBy: json["claimed_by"],
+    );
   }
 }

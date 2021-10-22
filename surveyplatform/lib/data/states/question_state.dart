@@ -20,6 +20,7 @@ class QuestionState extends ChangeNotifier {
   });
 
   Question get question => Question(
+      questionID: 0,
       text: text,
       position: position,
       widget: widget,
@@ -27,6 +28,7 @@ class QuestionState extends ChangeNotifier {
       mandatory: mandatory);
 
   void setMandatory(bool value) {
+    print("mandatory: $value");
     _mandatory = value;
     notifyListeners();
   }
@@ -37,6 +39,7 @@ class QuestionState extends ChangeNotifier {
   }
 
   void setQuestionText(String text) {
+    print("setting $text");
     _text = text;
     notifyListeners();
   }

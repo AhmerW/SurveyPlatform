@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveyplatform/data/converters.dart';
 import 'package:surveyplatform/data/states/question_state.dart';
 
 import 'package:surveyplatform/widgets/field.dart';
@@ -18,16 +19,16 @@ class SliderWidget extends StatefulWidget {
 
 class _SliderWidgetState extends State<SliderWidget> {
   int _divisions = 100;
-  double _min = 0;
+  double _min = 1;
   double _max = 100;
   double _value = 50;
 
   double getMin() {
-    return widget.question.values["min"] ?? 0;
+    return parseDouble(widget.question.values["min"], defaultValue: 1.0);
   }
 
   double getMax() {
-    return widget.question.values["max"] ?? 100;
+    return parseDouble(widget.question.values["max"], defaultValue: 100);
   }
 
   @override
@@ -80,7 +81,7 @@ class _SliderWidgetState extends State<SliderWidget> {
             if (val != null)
               setState(() {
                 widget.question.values["min"] = val;
-                _min = val as double;
+                _min = val.toDouble();
                 _value = _min;
               });
           },
@@ -104,7 +105,7 @@ class _SliderWidgetState extends State<SliderWidget> {
             if (val != null)
               setState(() {
                 widget.question.values["max"] = val;
-                _max = val as double;
+                _max = val.toDouble();
                 _value = _max;
               });
           },

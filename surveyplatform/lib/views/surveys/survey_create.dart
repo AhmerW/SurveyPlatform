@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
@@ -55,9 +56,10 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: HomePage.backgroundColor,
+        backgroundColor: HomePage.darkBackgroundColor,
         appBar: AppBar(
           backgroundColor: HomePage.darkBackgroundColor,
+          elevation: 20,
           centerTitle: true,
           title: Container(
             constraints: BoxConstraints(
@@ -65,7 +67,12 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
             ),
             child: TextField(
               controller: _titleController,
-              decoration: InputDecoration(hintText: "Klikk for å endre tittel"),
+              style: TextStyle(
+                color: Colors.white,
+              ),
+              decoration: InputDecoration(
+                  hintText: "Klikk for å endre tittel",
+                  hintStyle: TextStyle(color: Colors.white)),
             ),
           ),
         ),
@@ -75,19 +82,67 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
               flex: 3,
               child: Container(
                 decoration: BoxDecoration(
-                    border: Border(
-                        right: BorderSide(
-                            width: 10, color: Colors.grey.shade300))),
+                  border: Border(
+                    right: BorderSide(width: 10, color: Colors.grey.shade300),
+                  ),
+                ),
                 child: Column(
                   children: [
                     Flexible(
                       flex: 2,
-                      child: Text("Widgets"),
+                      child: Text(
+                        "Widgets",
+                        style: GoogleFonts.merriweather(
+                            color: Colors.white, fontSize: 20),
+                      ),
                     ),
                     Divider(),
                     Flexible(
-                      flex: 8,
+                      flex: 15,
                       child: const SurveyCreateSurveyWidgetList(),
+                    ),
+                    Divider(),
+                    Flexible(
+                      flex: 1,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              postSurvey(true).then((response) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: response.ok
+                                            ? Text("Lagring vellykket")
+                                            : Text("Lagring feilet")));
+                              });
+                            },
+                            child: Text("Lagre"),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                postSurvey(false).then((response) {
+                                  print("POSTED");
+                                  if (response.ok)
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (_) => HubPage(
+                                                  didPublishSurvey: true,
+                                                )));
+                                });
+                              },
+                              child: Text("Publiser"),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Text("Forhåndsvis"),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -123,47 +178,6 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
                     flex: 15,
                     child: QuestionList(),
                   ),
-                  Divider(),
-                  Container(
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            postSurvey(true).then((response) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: response.ok
-                                          ? Text("Lagring vellykket")
-                                          : Text("Lagring feilet")));
-                            });
-                          },
-                          child: Text("Lagre"),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              postSurvey(false).then((response) {
-                                print("POSTED");
-                                if (response.ok)
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => HubPage(
-                                            didPublishSurvey: true,
-                                          )));
-                              });
-                            },
-                            child: Text("Publiser"),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Text("Forhåndsvis"),
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),

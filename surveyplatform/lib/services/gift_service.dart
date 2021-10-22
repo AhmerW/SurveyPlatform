@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get_it/get_it.dart';
 import 'package:surveyplatform/data/network.dart';
 import 'package:surveyplatform/data/response.dart';
@@ -43,15 +45,57 @@ class GiftService {
     return parsed.map<Item>((item) => Item.fromJson(item)).toList();
   }
 
+  Future<ServerResponse> createGift({
+    required String title,
+    required int price,
+    required String description,
+    required String token,
+  }) async {
+    return await sendServerRequestAuthenticated(
+      "$serverPath/",
+      RequestType.Post,
+      token: token,
+      data: jsonEncode({
+        "price": price,
+        "title": title,
+        "description": description,
+      }),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  Future<ServerResponse> deleteGift(
+    int gift_id, {
+    required String token,
+  }) async {
+    return await sendServerRequestAuthenticated(
+      "$serverPath/$gift_id",
+      RequestType.Delete,
+      token: token,
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
   Future<ServerResponse> createGiftItem(int gift_id, String value,
       {required String token}) async {
     return await sendServerRequestAuthenticated(
-      "$serverPath/$gift_id/items/",
+      "$serverPath/$gift_id/items",
       RequestType.Post,
       token: token,
-      data: {
+      data: jsonEncode({
         "value": value,
-      },
+      }),
+      headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  Future<ServerResponse> deleteGiftItem(int gift_id, int item_id,
+      {required String token}) async {
+    return await sendServerRequestAuthenticated(
+      "$serverPath/$gift_id/items/$item_id",
+      RequestType.Delete,
+      token: token,
+      headers: {"Content-Type": "application/json"},
     );
   }
 }

@@ -14,8 +14,10 @@ class LoginContainer extends StatefulWidget {
 }
 
 class _LoginContainerState extends State<LoginContainer> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwdController = TextEditingController();
+  TextEditingController _usernameController =
+      TextEditingController.fromValue(TextEditingValue(text: "admin"));
+  TextEditingController _passwdController =
+      TextEditingController.fromValue(TextEditingValue(text: "xrYcpB3sZg_FPw"));
 
   @override
   void dispose() {
@@ -176,7 +178,7 @@ class _LoginContainerState extends State<LoginContainer> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     "Har ikke konto?",

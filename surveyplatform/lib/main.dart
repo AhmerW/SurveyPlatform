@@ -52,8 +52,12 @@ class SurveyPlatform extends StatelessWidget {
       title: 'SurveyPlatform',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
+          primarySwatch: Colors.orange,
+          primaryIconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          primaryTextTheme:
+              TextTheme(bodyText1: TextStyle(color: Colors.white))),
       home: HomePage(),
     );
   }

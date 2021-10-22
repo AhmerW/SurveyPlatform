@@ -6,6 +6,7 @@ import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/surveys/survey_create.dart';
 import 'package:surveyplatform/widgets/dialogs/gifts/gift_dialog.dart';
 import 'package:surveyplatform/widgets/funcs.dart';
+import 'package:surveyplatform/widgets/surveys/widgets/admin_survey_list.dart';
 
 typedef void CallbackFn(BuildContext context);
 
@@ -26,15 +27,30 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   final List<AdminPageButton> _adminPageButtons = [
     AdminPageButton(
-        "Lag en ny spørreundersøkelse",
-        (BuildContext context) => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SurveyCreatePage()))),
-    AdminPageButton("Administrer gaver", (context) {
-      showDialog(
+      "Administrer spørreundersøkelser",
+      (BuildContext context) => showDialog(
         context: context,
-        builder: (context) => GiftDialog(),
-      );
-    })
+        builder: (context) => _AdminSurveyDialog(),
+      ),
+    ),
+    AdminPageButton(
+      "Lag en ny spørreundersøkelse",
+      (BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SurveyCreatePage(),
+        ),
+      ),
+    ),
+    AdminPageButton(
+      "Administrer gaver",
+      (context) {
+        showDialog(
+          context: context,
+          builder: (context) => GiftDialog(),
+        );
+      },
+    ),
   ];
 
   @override
@@ -74,24 +90,59 @@ class _AdminPageState extends State<AdminPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: _adminPageButtons
-                          .map(
-                            (btn) => Container(
-                              padding: EdgeInsets.symmetric(vertical: 50),
-                              height:
-                                  (MediaQuery.of(context).size.height * 0.7) /
-                                      _adminPageButtons.length,
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              child: SimpleButton(
-                                btn.title,
-                                () => btn.callback(context),
-                              ),
-                            ),
-                          )
+                          .map((btn) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 50),
+                                    height:
+                                        (MediaQuery.of(context).size.height *
+                                                0.7) /
+                                            _adminPageButtons.length,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: SimpleButton(
+                                      btn.title,
+                                      () => btn.callback(context),
+                                    ),
+                                  ),
+                                ],
+                              ))
                           .toList()),
                 ),
               ],
             );
           },
         ));
+  }
+}
+
+//
+
+class _AdminSurveyDialog extends StatefulWidget {
+  const _AdminSurveyDialog({Key? key}) : super(key: key);
+
+  @override
+  __AdminSurveyDialogState createState() => __AdminSurveyDialogState();
+}
+
+class __AdminSurveyDialogState extends State<_AdminSurveyDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: HomePage.darkBackgroundColor,
+      title: Text(
+        "Spørreundersøkelser",
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      content: Container(
+        color: HomePage.darkBackgroundColor,
+        height: MediaQuery.of(context).size.height * 0.7,
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: AdminSurveyList(),
+      ),
+    );
   }
 }

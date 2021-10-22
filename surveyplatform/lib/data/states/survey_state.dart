@@ -12,7 +12,7 @@ class SurveyStateNotifier extends ChangeNotifier {
   bool _fetchedDrafts = false;
 
   void sortSurveys() {
-    _surveys.sort((current, next) => next.surveyid.compareTo(next.surveyid));
+    _surveys.sort((current, next) => next.surveyID.compareTo(next.surveyID));
   }
 
   void addSurvey(Survey survey) => _surveys.add(survey);
@@ -35,5 +35,17 @@ class SurveyStateNotifier extends ChangeNotifier {
     return await locator<SurveyService>().postSurvey(survey, token);
 
     /* Survey? surveyout = GetIt.I<SurveyService>().surveyFromResponse(response); */
+  }
+
+  Future<ServerResponse> deleteSurvey(Survey survey, String token) async {
+    ServerResponse response = await locator<SurveyService>().deleteSurvey(
+      survey.surveyID,
+      token,
+    );
+    if (response.ok) {
+      _surveys.removeWhere((s) => s.surveyID == survey.surveyID);
+      notifyListeners();
+    }
+    return response;
   }
 }

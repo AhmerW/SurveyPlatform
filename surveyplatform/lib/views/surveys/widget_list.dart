@@ -25,10 +25,13 @@ class _SurveyCreateSurveyWidgetListState
         return Column(
           children: [
             PhysicalModel(
-              color: Color(0xFF93BFE0),
+              color: HomePage.primaryColor,
               elevation: 20,
               child: ListTile(
-                title: Text(item),
+                title: Text(
+                  item,
+                  style: TextStyle(color: Colors.black),
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

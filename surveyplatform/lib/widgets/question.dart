@@ -15,6 +15,14 @@ class QuestionWidget extends StatefulWidget {
 }
 
 class _QuestionWidgetState extends State<QuestionWidget> {
+  TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     QuestionState question = widget.question;
@@ -25,7 +33,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         constraints: BoxConstraints(maxHeight: 500),
         height: 500,
         child: PhysicalModel(
-          color: Color(0xFF93BFE0),
+          color: HomePage.backgroundColor,
           elevation: 20,
           child: Container(
             padding: EdgeInsets.all(30),
@@ -55,10 +63,15 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: TextField(
+                      controller: _textController,
                       decoration: InputDecoration(
                         hintText: "Skriv spørsmålet her",
                       ),
-                      onSubmitted: widget.question.setQuestionText,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      onChanged: (_) =>
+                          question.setQuestionText(_textController.text),
                     ),
                   ),
                   Divider(),

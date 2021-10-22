@@ -7,7 +7,7 @@ import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/services/survey_service.dart';
 import 'package:surveyplatform/views/home.dart';
-import 'package:surveyplatform/views/survey_answer.dart';
+import 'package:surveyplatform/views/surveys/survey_answer.dart';
 
 class SurveyList extends StatefulWidget {
   const SurveyList({Key? key}) : super(key: key);
@@ -58,9 +58,9 @@ class _SurveyListState extends State<SurveyList> {
               itemCount: surveys.length,
               itemBuilder: (context, index) {
                 Survey survey = surveys[index];
-                print(survey.questions);
-                if (!surveyStates.containsKey(survey.surveyid)) {
-                  surveyStates[survey.surveyid] = defaultWidth;
+
+                if (!surveyStates.containsKey(survey.surveyID)) {
+                  surveyStates[survey.surveyID] = defaultWidth;
                 }
 
                 return Align(
@@ -71,9 +71,9 @@ class _SurveyListState extends State<SurveyList> {
                       maxHeight: 350,
                       maxWidth: 350,
                     ),
-                    width: getSurveySize(survey.surveyid),
+                    width: getSurveySize(survey.surveyID),
                     child: Material(
-                      shadowColor: Colors.blue,
+                      shadowColor: HomePage.primaryColor,
                       elevation: 30,
                       borderRadius: BorderRadius.circular(20),
                       child: InkWell(
@@ -82,7 +82,7 @@ class _SurveyListState extends State<SurveyList> {
                                 builder: (_) => SurveyAnswerPage(survey))),
                         onHover: (isHovering) {
                           setState(() {
-                            surveyStates[survey.surveyid] =
+                            surveyStates[survey.surveyID] =
                                 isHovering ? hoverWidth : defaultWidth;
                           });
                         },
@@ -114,7 +114,11 @@ class _SurveyListState extends State<SurveyList> {
                                   ),
                                   Spacer(),
                                   OutlinedButton(
-                                      onPressed: () {}, child: Text("Svar"))
+                                      onPressed: () => Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (_) =>
+                                                  SurveyAnswerPage(survey))),
+                                      child: Text("Svar"))
                                 ],
                               ),
                             )

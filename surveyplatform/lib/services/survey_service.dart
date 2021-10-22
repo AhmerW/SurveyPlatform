@@ -72,4 +72,12 @@ class SurveyService {
       token: token,
     );
   }
+
+  Future<ServerResponse> deleteSurvey(int survey_id, String token) async {
+    return await sendServerRequestAuthenticated(
+      "$serverPath$survey_id",
+      RequestType.Delete,
+      token: token,
+    );
+  }
 }

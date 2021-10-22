@@ -112,8 +112,6 @@ class _RegisterContainerState extends State<RegisterContainer> {
                     Provider.of<AuthStateNotifier>(context, listen: false)
                         .register(context, username, password, email)
                         .then((response) {
-                      print(response.hasError);
-                      print(response.ok);
                       if (!response.ok && response.hasError) {
                         setState(() {
                           statusState.detail = response.error!.message;

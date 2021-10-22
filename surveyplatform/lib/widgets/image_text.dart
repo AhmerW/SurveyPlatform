@@ -22,7 +22,12 @@ class _ImageTextState extends State<ImageText> {
   Widget build(BuildContext context) {
     final bool isSmallWidth = MediaQuery.of(context).size.width < 1200;
     Widget textWidget = Container(
-      padding: EdgeInsets.only(right: 50),
+      alignment: Alignment.center,
+      padding: isSmallWidth
+          ? null
+          : widget.imageAtRight
+              ? EdgeInsets.only(right: 50)
+              : EdgeInsets.only(left: 50),
       child: RichText(
         text: TextSpan(
           style: GoogleFonts.notoSans(color: Colors.white),
@@ -40,16 +45,25 @@ class _ImageTextState extends State<ImageText> {
       ),
     );
     Widget image = Container(
-      padding: !widget.imageAtRight ? EdgeInsets.only(right: 100) : null,
-      child: Image.asset(
-        widget.image,
-        fit: BoxFit.contain,
+      padding: EdgeInsets.all(50),
+      child: PhysicalModel(
+        color: Colors.transparent,
+        shadowColor: Colors.black,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            widget.image,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
 
     return Flex(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: isSmallWidth
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.spaceAround,
       mainAxisSize: MainAxisSize.min,
       direction: isSmallWidth ? Axis.vertical : Axis.horizontal,
       children: isSmallWidth

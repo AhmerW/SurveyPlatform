@@ -45,11 +45,21 @@ class _HubPageState extends State<HubPage> {
   @override
   Widget build(BuildContext context) {
     bool isWide = MediaQuery.of(context).size.width > 650;
+    AuthStateNotifier asn = Provider.of<AuthStateNotifier>(context);
 
     return Scaffold(
       backgroundColor: HomePage.backgroundColor,
       appBar: AppBar(
         backgroundColor: HomePage.backgroundColor,
+        title: Provider.of<AuthStateNotifier>(context).isGuest
+            ? null
+            : Text(
+                "Velkommen, ${asn.user.username}!",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+        centerTitle: true,
         actions: [
           Provider.of<AuthStateNotifier>(context).user.admin
               ? IconButton(
@@ -57,8 +67,17 @@ class _HubPageState extends State<HubPage> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => AdminPage()));
                   },
-                  icon: Icon(Icons.admin_panel_settings))
+                  icon: Icon(Icons.admin_panel_settings),
+                  color: Colors.red,
+                )
               : SizedBox.shrink(),
+          Provider.of<AuthStateNotifier>(context).isGuest
+              ? SizedBox.shrink()
+              : IconButton(
+                  onPressed: () {},
+                  color: Colors.green,
+                  icon: Icon(Icons.card_giftcard),
+                ),
           Consumer<AuthStateNotifier>(
             builder: (context, asn, _) {
               return IconButton(
@@ -80,6 +99,7 @@ class _HubPageState extends State<HubPage> {
                 },
                 icon: Icon(
                   Icons.account_circle,
+                  color: Colors.orange,
                 ),
               );
             },
@@ -102,8 +122,10 @@ class _HubPageState extends State<HubPage> {
                           alignment: Alignment.topLeft,
                           child: RichText(
                             text: TextSpan(
-                              style:
-                                  GoogleFonts.indieFlower(color: Colors.white),
+                              style: GoogleFonts.indieFlower(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                               children: [
                                 TextSpan(
                                     text: "Logg inn ",
