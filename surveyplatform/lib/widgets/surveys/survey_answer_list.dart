@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/views/home.dart';
+import 'package:surveyplatform/widgets/dialogs/submit_survey_answer_dialog.dart';
 import 'package:surveyplatform/widgets/surveys/survey_answer_question.dart';
 
 class SurveyAnswerList extends StatefulWidget {
@@ -181,7 +182,14 @@ class __SurveyAnswerDoneState extends State<_SurveyAnswerDone> {
                   height: 200,
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => SubmitSurveyAnswerDialog(
+                          widget.survey.surveyID,
+                        ),
+                      ).then((value) => Navigator.of(context).pop());
+                    },
                     child: Text("Send svar"),
                   ),
                 ),

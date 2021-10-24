@@ -46,6 +46,9 @@ class UserQueries:
     FromUid = """
         SELECT * FROM Users WHERE uid = ?
     """
+    UpdatePoints = """
+        UPDATE Users SET points = points + ? WHERE uid = ?
+    """
 
     AnyExists = """
         SELECT * FROM Users WHERE username = ? or email = ?
@@ -69,6 +72,17 @@ class AnswerQueries:
     GetUserAnswer = """
         SELECT * FROM SurveyAnswers where survey_id = ? and uid = ?;
     """
+    GetAnswers = """
+        SELECT * FROM SurveyAnswers
+        JOIN QuestionAnswers 
+        on QuestionAnswers.answer_id = SurveyAnswers.answer_id;
+    """
+    GetSurveyAnswers = """
+        SELECT * FROM SurveyAnswers
+        JOIN QuestionAnswers 
+        on QuestionAnswers.answer_id = SurveyAnswers.answer_id
+        WHERE SurveyAnswers.survey_id = ?;
+    """
 
 
 class GiftQueries:
@@ -79,7 +93,7 @@ class GiftQueries:
         SELECT * FROM Gifts WHERE Gifts.gift_id = ?;
     """
     GetGifts = """
-        SELECT g.*, count(*) AS count 
+        SELECT g.*, count(*) AS item_count 
         FROM Gifts AS g left join GiftItems AS i
         ON g.gift_id = i.gift_id GROUP BY g.gift_id
     """
@@ -98,6 +112,9 @@ class GiftQueries:
     """
     GetClaimedGiftItems = """
         SELECT * FROM GiftItems WHERE GiftItems.gift_id = ? and GiftItems.claimed = true;
+    """
+    GetUserClaimedGiftItems = """
+        SELECT * FROM GiftItems WHERE claimed = true and claimed_by = ?;
     """
 
     AddGiftItem = """

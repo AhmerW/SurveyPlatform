@@ -1,7 +1,7 @@
 from enum import IntFlag
 from time import time
 from typing import Dict, List, Optional, Tuple
-import random
+from dataclasses import dataclass, field
 
 from starlette.background import BackgroundTask, BackgroundTasks
 
@@ -26,11 +26,11 @@ from data.services.pagination import paginateList
 from responses import Error
 
 
+@dataclass
 class _GiftItemStateContainer(StateContainer):
-    def __init__(self) -> None:
-        self._updated: bool = False
-        self._items: Dict[int, List[ItemOut]] = dict()
-        self._claimed: Dict[int, List[ItemOut]] = dict()
+    _updated: bool = False
+    _items: Dict[int, List[ItemOut]] = field(default_factory=dict)
+    _claimed: Dict[int, List[ItemOut]] = field(default_factory=dict)
 
 
 class _GiftItemService(_GiftItemServiceImplementation):
@@ -54,9 +54,9 @@ class _GiftItemService(_GiftItemServiceImplementation):
         return super().state
 
 
+@dataclass()
 class GiftStateContainer(StateContainer):
-    def __init__(self) -> None:
-        self._gifts: List[Gift] = list()
+    _gifts: List[Gift] = field(default_factory=list)
 
 
 class GiftService(_GiftServiceImplementation):

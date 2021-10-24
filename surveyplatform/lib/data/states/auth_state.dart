@@ -31,6 +31,13 @@ class AuthStateNotifier extends ChangeNotifier {
   String get token => _token;
   AuthLoginState get state => _state;
 
+  void setPoints(int points) {
+    if (isUser) {
+      user.points = points;
+      notifyListeners();
+    }
+  }
+
   void setState(AuthLoginState state) {
     this._state = state;
     notifyListeners();

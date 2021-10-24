@@ -107,7 +107,8 @@ class _GiftItemServiceImplementation(BaseService):
         await self.execute(GiftQueries.ClaimGiftItem, (user.uid, item_id))
         item.claimed = True
         item.claimed_by = user.uid
-        self.state._claimed[gift_id].append(item)
+        self.appendItem(item, self.state._claimed)
+
         return item
 
     async def claimAnyItem(
@@ -208,6 +209,10 @@ class _GiftItemServiceImplementation(BaseService):
 
         return parsed[0]
 
+    async def getUserClaims(self, uid: int) -> List[ItemOut]:
+        _items = await self.fetchall(GiftQueries.GetUserClaimedGiftItems, (uid,))
+        return [ItemOut(**item) for item in _items]
+
     async def _finishDeletingItem(self, gift_id: int, item_id: int):
         gift = await self._giftsrvc.getGift(gift_id)
         if gift is not None:
@@ -252,6 +257,9 @@ class _GiftItemServiceImplementation(BaseService):
     async def totalItems(self, gift_id: int):
         await self.ensureUpdated(gift_id)
         return len(self.state._items.get(gift_id, list()))
+
+
+## GiftServiceImplementation
 
 
 class _GiftServiceImplementation(BaseService):

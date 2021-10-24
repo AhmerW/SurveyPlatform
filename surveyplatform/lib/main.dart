@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:ui' as ui;
 
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/data/states/gift_state.dart';
 import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/data/states/survey_create_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
+import 'package:surveyplatform/services/answer_service.dart';
 import 'package:surveyplatform/services/auth_service.dart';
 import 'package:surveyplatform/services/gift_service.dart';
 import 'package:surveyplatform/services/survey_service.dart';
@@ -21,6 +23,7 @@ void main() {
   locator.registerLazySingleton<SurveyService>(() => SurveyService());
   locator.registerLazySingleton<AuthService>(() => AuthService());
   locator.registerLazySingleton<GiftService>(() => GiftService());
+  locator.registerLazySingleton<AnswerService>(() => AnswerService());
 
   runApp(MultiProvider(
     providers: [
@@ -39,7 +42,7 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => GiftStateNotifier(),
-      )
+      ),
     ],
     child: SurveyPlatform(),
   ));

@@ -11,7 +11,10 @@ DEV: Final[bool] = True
 base_path: Final[str] = "/api/v1"
 
 project = "SurveyPlatform"
-app = FastAPI(root_path=None if DEV else base_path)
+app = FastAPI(
+    root_path=None if DEV else base_path,
+    openapi_url=None,
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

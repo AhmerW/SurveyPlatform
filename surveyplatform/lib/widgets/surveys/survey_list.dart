@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/survey.dart';
@@ -77,9 +79,42 @@ class _SurveyListState extends State<SurveyList> {
                       elevation: 30,
                       borderRadius: BorderRadius.circular(20),
                       child: InkWell(
-                        onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => SurveyAnswerPage(survey))),
+                        onTap: () {
+                          AuthStateNotifier asn =
+                              Provider.of<AuthStateNotifier>(context,
+                                  listen: false);
+                          if (asn.isUser) {
+                            Provider.of<SurveyAnswerState>(context,
+                                    listen: false)
+                                .surveyIsAnswered(
+                              asn.user.uid,
+                              survey.surveyID,
+                              token: getToken(context),
+                            )
+                                .then((value) {
+                              if (!value) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => SurveyAnswerPage(survey),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "Du har allerede svart på denne undersøkelsen"),
+                                  ),
+                                );
+                              }
+                            });
+                          } else if (asn.isGuest) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => SurveyAnswerPage(survey),
+                              ),
+                            );
+                          }
+                        },
                         onHover: (isHovering) {
                           setState(() {
                             surveyStates[survey.surveyID] =

@@ -8,6 +8,7 @@ import 'package:surveyplatform/services/survey_service.dart';
 class SurveyStateNotifier extends ChangeNotifier {
   List<Survey> _surveys = [];
   List<Survey> _drafts = [];
+
   bool _fetched = false;
   bool _fetchedDrafts = false;
 
@@ -29,6 +30,16 @@ class SurveyStateNotifier extends ChangeNotifier {
       _fetched = true;
     }
     return _surveys;
+  }
+
+  Future<Survey?> getSurvey(int survey_id) async {
+    try {
+      return (await getSurveys()).singleWhere(
+        (survey) => survey.surveyID == survey_id,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<ServerResponse> postSurvey(Survey survey, String token) async {

@@ -70,6 +70,15 @@ class UserService(BaseService):
         raw = await self.fetchone(UserQueries.AnyExists, (username, email))
         return not (raw == None)
 
+    async def incrementPoints(self, uid: int, points: int):
+        await self.execute(
+            UserQueries.UpdatePoints,
+            (
+                points,
+                uid,
+            ),
+        )
+
 
 RESET_CODE_BYTES = 20
 RESET_CODE_EXPIRE = 900

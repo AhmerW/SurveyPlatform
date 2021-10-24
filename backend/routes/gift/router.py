@@ -136,7 +136,7 @@ async def getItems(
     item_id: Optional[int] = None,
     page: Optional[int] = None,
     total: bool = False,
-    type: _GetGiftItemsType = _GetGiftItemsType.unclaimed,
+    type: _GetGiftItemsType = _GetGiftItemsType.all,
     user: User = Depends(getUser),
 ):
 
@@ -221,12 +221,18 @@ async def claimItem(
 
 
 @router.get("/{gift_id}/items/claims", response_model=ItemResponse)
+@router.get("/items/claims", response_model=ItemResponse)
 async def getItemClaims(
-    gift_id: int,
-    user: User = Depends(getAdmin),
+    gift_id: Optional[int] = None,
+    user: User = Depends(getUser),
 ):
     claims: List[ItemOut] = list()
     async with GiftService() as service:
-        claims = await service.getGiftClaims(gift_id)
+
+        if user.admin and gift_id is not None:
+            print("getting claims")
+            claims = await service.getGiftClaims(gift_id)
+        else:
+            claims = await service.itemService.getUserClaims(user.uid)
 
     return ItemResponse(data=ItemValueModel(items=claims))

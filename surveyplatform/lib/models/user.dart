@@ -19,10 +19,14 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(json["uid"], json["username"],
-        email: json["email"],
-        verified: json["verified"],
-        admin: json["admin"],
-        owner: json["owner"]);
+    return User(
+      json["uid"],
+      json["username"],
+      email: json["email"],
+      verified: json["verified"],
+      admin: json["admin"],
+      owner: json["owner"],
+      points: json["points"] ?? 0,
+    );
   }
 }

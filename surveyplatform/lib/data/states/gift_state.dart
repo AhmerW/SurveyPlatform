@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
+import 'package:surveyplatform/data/network.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/gift.dart';
@@ -8,7 +9,8 @@ import 'package:surveyplatform/services/gift_service.dart';
 class GiftStateNotifier extends ChangeNotifier {
   bool _loaded = false;
   List<Gift> _gifts = [];
-  Map<int, List<Item>> _items = {};
+  Map<int, List<Item>> _items = {}; // gift : item
+  Map<int, List<Item>> _claimed = {};
 
   List<Gift> get gifts => _gifts;
 
@@ -20,6 +22,55 @@ class GiftStateNotifier extends ChangeNotifier {
     await load();
     notifyListeners();
   }
+
+  List<Item> getUnclaimed(int gift_id) {
+    if (!_items.containsKey(gift_id)) return [];
+    return _items[gift_id]!.where((item) => !item.claimed).toList();
+  }
+
+  // CLAIMS
+
+  Future<List<Item>> getClaimed(int uid, {required String token}) async {
+    if (_claimed.containsKey(uid)) return _claimed[uid]!;
+    _claimed[uid] = await locator<GiftService>().getUserClaimed(token: token);
+    return _claimed[uid]!;
+  }
+
+  void updateClaimed(Item item, int uid) {
+    if (_claimed.containsKey(uid)) {
+      _claimed[uid]!.add(item);
+    }
+    if (_items.containsKey(item.giftID)) {
+      _items[item.giftID]!.forEach((i) {
+        if (i.itemID == item.itemID) {
+          i.claimed = true;
+          i.claimedBy = uid;
+        }
+      });
+    }
+  }
+
+  Future<ServerResponse> claimAnyItem(
+    Gift gift, {
+    required int uid,
+    required String token,
+  }) async {
+    ServerResponse response = await locator<GiftService>().claimAnyGiftItem(
+      gift,
+      token: token,
+    );
+    if (response.ok) {
+      Map<String, dynamic>? item_json = response.data["item"];
+      if (item_json != null) {
+        Item item = Item.fromJson(item_json);
+        updateClaimed(item, uid);
+      }
+    }
+
+    return response;
+  }
+
+  // CLAIMS END
 
   Future<List<Item>> refreshItems(Gift gift, {required String token}) async {
     return await getItems(

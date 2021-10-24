@@ -19,7 +19,7 @@ class ValueModel(BaseModel):
 
 class User(BaseModel):
     uid: Optional[int] = None
-    points: Optional[int] = None
+    points: Optional[int] = 0
     username: str
     email: str
     verified: bool
@@ -96,12 +96,15 @@ class QuestionAnswer(BaseModel):
 
 
 class SurveyAnswerIn(BaseModel):
-    survey_id: int
+
     answers: List[QuestionAnswer]
 
 
 class SurveyAnswerOut(SurveyAnswerIn):
+    survey_id: int
     answer_id: int
+    timestamp: int
+    uid: Optional[int] = None
 
 
 SurveyAnswer = SurveyAnswerIn

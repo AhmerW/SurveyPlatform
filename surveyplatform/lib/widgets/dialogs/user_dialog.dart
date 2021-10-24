@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/login.dart';
+import 'package:surveyplatform/widgets/dialogs/gifts/user_gifts_list.dart';
 
 class UserInfoDialog extends StatelessWidget {
   final AuthStateNotifier asn;
@@ -29,8 +30,27 @@ class UserInfoDialog extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.topLeft,
             child: Text("Poeng: ${asn.user.points}"),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.orange,
+              ),
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) => UserGiftsListDialog()),
+              child: Row(
+                children: [
+                  Text(
+                    "Mine gaver",
+                  ),
+                  Icon(Icons.card_giftcard),
+                ],
+              ),
+            ),
           ),
           Container(
             padding: EdgeInsets.only(top: 20),

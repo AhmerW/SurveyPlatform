@@ -1,4 +1,5 @@
 from typing import Dict, Final, List, Optional
+from dataclasses import dataclass, field
 import json
 
 
@@ -10,10 +11,10 @@ from data.services.question_service import questionFromDict
 from responses import Error
 
 
+@dataclass
 class SurveyStateContainer(StateContainer):
-    def __init__(self) -> None:
-        self._surveys: List[SurveyOut] = list()
-        self._drafts: List[SurveyOut] = list()
+    _surveys: List[SurveyOut] = field(default_factory=list)
+    _drafts: List[SurveyOut] = field(default_factory=list)
 
 
 class SurveyService(BaseService):
@@ -42,7 +43,6 @@ class SurveyService(BaseService):
                 survey.draft,
             ),
         )
-        print("soid: ", survey_out_id)
 
         if not survey_out_id:
             return None
@@ -68,7 +68,6 @@ class SurveyService(BaseService):
 
     async def delete(self, survey_id: int):
         deleted = False
-        print(self.state._surveys)
 
         for i, survey in enumerate(self.state._surveys):
             if survey.survey_id == survey_id:
@@ -80,7 +79,7 @@ class SurveyService(BaseService):
                 if draft.survey_id == survey_id:
                     self.state._surveys.pop(i)
                     deleted = True
-        print("del: ", deleted)
+
         if (not deleted) and self.state._surveys:
             raise Error("Survey does not exist")
 
@@ -133,13 +132,11 @@ class SurveyService(BaseService):
         page: int = 1,
     ) -> List[Survey]:
 
-        print(f"getting surveys: {self.state._surveys}")
         if not self.state._surveys:
             await self.refreshSurveysCache(
                 attr="_surveys",
                 query=SurveyQueries.GetAllVisibleSurveys,
             )
-            print(f"refreshed: {self.state._surveys}")
 
         return paginateList(self.state._surveys, page)
 

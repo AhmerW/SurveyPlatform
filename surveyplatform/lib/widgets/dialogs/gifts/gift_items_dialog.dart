@@ -100,6 +100,13 @@ class _GiftItemsDialogState extends State<GiftItemsDialog> {
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
                                         ),
+                                        subtitle: !item.claimed
+                                            ? null
+                                            : TextButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                    "Claimed av en bruker."),
+                                              ),
                                         trailing: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [

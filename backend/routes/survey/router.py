@@ -19,6 +19,7 @@ from data.models import (
 )
 from data.services.survey_service import SurveyService
 from routes.auth import authLogin
+from routes.survey.answer.router import router as answer_router
 
 router = APIRouter()
 
@@ -65,19 +66,21 @@ async def createSurvey(
 
 
 @router.delete(
-    "/{surveyid}",
+    "/{survey_id}",
 )
 async def deleteSurvey(
-    surveyid: int,
-    survey: Survey,
+    survey_id: int,
     user: User = Depends(getAdmin),
 ):
     async with SurveyService() as service:
-        await service.delete(surveyid)
+        await service.delete(survey_id)
 
     return Success(detail="If there was a survey with that id, it has been deleted.")
 
 
-@router.patch("/{surveyid}")
-async def patchSurvey(surveyid: int, user: User = Depends(getAdmin)):
+@router.patch("/{survey_id}")
+async def patchSurvey(survey_id: int, user: User = Depends(getAdmin)):
     pass
+
+
+router.include_router(answer_router)

@@ -9,6 +9,22 @@ import 'package:surveyplatform/models/gift.dart';
 class GiftService {
   static String serverPath = "/gifts";
 
+  Future<List<Item>> getUserClaimed({required String token}) async {
+    ServerResponse response = await sendServerRequestAuthenticated(
+      "$serverPath/items/claims",
+      RequestType.Get,
+      token: token,
+    );
+    List<dynamic> result = (response.data["items"] ?? []);
+
+    List<Map<String, dynamic>> parsed = result
+        .map(
+          (item) => Map<String, dynamic>.from(item),
+        )
+        .toList();
+    return parsed.map<Item>((item) => Item.fromJson(item)).toList();
+  }
+
   Future<List<Gift>> getGifts() async {
     ServerResponse response =
         await sendServerRequest(serverPath, RequestType.Get);
@@ -96,6 +112,18 @@ class GiftService {
       RequestType.Delete,
       token: token,
       headers: {"Content-Type": "application/json"},
+    );
+  }
+
+  // Claims
+  Future<ServerResponse> claimAnyGiftItem(
+    Gift gift, {
+    required String token,
+  }) async {
+    return await sendServerRequestAuthenticated(
+      '/gifts/${gift.giftID}/items/claims',
+      RequestType.Post,
+      token: token,
     );
   }
 }

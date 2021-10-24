@@ -7,6 +7,7 @@ import 'package:surveyplatform/views/admin.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/login.dart';
 import 'package:surveyplatform/views/verification.dart';
+import 'package:surveyplatform/widgets/dialogs/gifts/gift_purchase_dialog.dart';
 import 'package:surveyplatform/widgets/dialogs/user_dialog.dart';
 import 'package:surveyplatform/widgets/surveys/survey_container.dart';
 import 'package:surveyplatform/widgets/surveys/survey_list.dart';
@@ -74,7 +75,10 @@ class _HubPageState extends State<HubPage> {
           Provider.of<AuthStateNotifier>(context).isGuest
               ? SizedBox.shrink()
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => GiftPurchaseDialog(),
+                  ),
                   color: Colors.green,
                   icon: Icon(Icons.card_giftcard),
                 ),

@@ -68,7 +68,18 @@ class ServerResponse {
   }
 
   factory ServerResponse.fromResponse(http.Response response) {
+    try {
+      Map<dynamic, dynamic> json = jsonDecode(response.body);
+    } catch (error) {
+      return ServerResponse(
+        {},
+        ok: false,
+        statusCode: 400,
+        error: Error("Failed ${response.body}"),
+      );
+    }
     Map<dynamic, dynamic> json = jsonDecode(response.body);
+    print(json);
 
     return ServerResponse.parse(json, response.statusCode);
   }

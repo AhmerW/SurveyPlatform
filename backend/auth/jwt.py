@@ -17,10 +17,12 @@ from globals import SECRET, pwd_ctx, admins, owners
 from responses import Error
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+optional_oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 credentials_exception = Error("Invalid credentials")
 
 
-async def getUser(token: str = Depends(oauth2_scheme)) -> Optional[User]:
+async def getUser(token: str = Depends(oauth2_scheme)) -> User:
+    print(token)
     payload = decodeToken(
         token,
         default=dict(),
@@ -42,12 +44,10 @@ async def getUser(token: str = Depends(oauth2_scheme)) -> Optional[User]:
     return user
 
 
-async def optionalUser(request: Request):
-    token = request.headers.get("Authorization")
-    if not token:
+async def optionalUser(token: str = Depends(optional_oauth2_scheme)) -> Optional[User]:
+    if token is None:
         return None
-
-    return await getUser(token.lower().replace("bearer", "").strip())
+    return await getUser(token)
 
 
 async def getVerifiedUser(
@@ -106,7 +106,7 @@ def decodeToken(
 
 def createToken(
     subject: str,
-    expires_delta: timedelta = timedelta(minutes=15),
+    expires_delta: timedelta = timedelta(minutes=60),
     access_token: str = None,
     claims: dict = {},
 ) -> str:

@@ -25,8 +25,8 @@ class Item {
   final String value;
   final int itemID;
   final int giftID;
-  final bool claimed;
-  final int? claimedBy;
+  bool claimed;
+  int? claimedBy;
 
   Item(
     this.value, {

@@ -115,74 +115,103 @@ class _AdminSurveyListState extends State<AdminSurveyList> {
                                     ),
                                   ),
                                   Spacer(),
-                                  Tooltip(
-                                    message: "Slett",
-                                    child: IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              SimpleOptionsDialog(
-                                            onSubmit: () {
-                                              setState(() {
-                                                Provider.of<
-                                                        SurveyStateNotifier>(
-                                                  context,
-                                                  listen: false,
-                                                )
-                                                    .deleteSurvey(
-                                                  survey,
-                                                  getToken(context),
-                                                )
-                                                    .then((response) {
-                                                  if (response.ok) {
-                                                    Navigator.of(context).pop();
-                                                  } else if (response
-                                                      .hasError) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            AlertDialog(
-                                                              title:
-                                                                  Text("error"),
-                                                              content: Text(
-                                                                  response
-                                                                      .error!
-                                                                      .message),
-                                                            ));
-                                                  }
-                                                });
-                                              });
-                                            },
-                                            title:
-                                                "Er du sikker på at du vil slette denne undersøkelsen?",
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Tooltip(
+                                            message: "Slett",
+                                            child: IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      SimpleOptionsDialog(
+                                                    onSubmit: () {
+                                                      setState(() {
+                                                        Provider.of<
+                                                                SurveyStateNotifier>(
+                                                          context,
+                                                          listen: false,
+                                                        )
+                                                            .deleteSurvey(
+                                                          survey,
+                                                          getToken(context),
+                                                        )
+                                                            .then((response) {
+                                                          if (response.ok) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          } else if (response
+                                                              .hasError) {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) =>
+                                                                        AlertDialog(
+                                                                          title:
+                                                                              Text("error"),
+                                                                          content: Text(response
+                                                                              .error!
+                                                                              .message),
+                                                                        ));
+                                                          }
+                                                        });
+                                                      });
+                                                    },
+                                                    title:
+                                                        "Er du sikker på at du vil slette denne undersøkelsen?",
+                                                  ),
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                            ),
                                           ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
+                                          Tooltip(
+                                            message: "Rediger",
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(Icons.edit),
+                                            ),
+                                          ),
+                                          Tooltip(
+                                            message: "Synlighet",
+                                            child: IconButton(
+                                              onPressed: () {
+                                                setState(() {});
+                                              },
+                                              icon: survey.draft
+                                                  ? Icon(Icons.visibility_off)
+                                                  : Icon(Icons.visibility),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                  Tooltip(
-                                    message: "Rediger",
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.edit),
-                                    ),
-                                  ),
-                                  Tooltip(
-                                    message: "Synlighet",
-                                    child: IconButton(
-                                      onPressed: () {
-                                        setState(() {});
-                                      },
-                                      icon: survey.draft
-                                          ? Icon(Icons.visibility_off)
-                                          : Icon(Icons.visibility),
-                                    ),
-                                  ),
+                                      Row(
+                                        children: [
+                                          Tooltip(
+                                            message:
+                                                "Gjør om svarene til en csv-fil",
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(Icons.cloud),
+                                            ),
+                                          ),
+                                          Tooltip(
+                                            message: "Last ned",
+                                            child: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.download)),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                             )
