@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:surveyplatform/data/const.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/main.dart';
@@ -10,6 +11,7 @@ import 'package:surveyplatform/services/survey_service.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/surveys/survey_answer.dart';
 import 'package:surveyplatform/widgets/dialogs/simple_options_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdminSurveyList extends StatefulWidget {
   const AdminSurveyList({Key? key}) : super(key: key);
@@ -195,18 +197,92 @@ class _AdminSurveyListState extends State<AdminSurveyList> {
                                       Row(
                                         children: [
                                           Tooltip(
-                                            message:
-                                                "Gjør om svarene til en csv-fil",
-                                            child: IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.cloud),
-                                            ),
-                                          ),
-                                          Tooltip(
                                             message: "Last ned",
                                             child: IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(Icons.download)),
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (_) => AlertDialog(
+                                                      backgroundColor: HomePage
+                                                          .darkBackgroundColor,
+                                                      title: Text(
+                                                        "Last ned alle svar",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      content: Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.5,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.5,
+                                                        color: HomePage
+                                                            .darkBackgroundColor,
+                                                        child: Column(
+                                                          children: [
+                                                            ListTile(
+                                                              title: Text("CSV",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              trailing:
+                                                                  IconButton(
+                                                                onPressed: () {
+                                                                  launch(
+                                                                      "$fullServerUrl/surveys/${survey.surveyID}/answers?format=csv",
+                                                                      headers: {
+                                                                        "Authorization":
+                                                                            "bearer ${getToken(context)}"
+                                                                      });
+                                                                },
+                                                                icon: Icon(
+                                                                  Icons
+                                                                      .download,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            ListTile(
+                                                              title: Text(
+                                                                  "JSON",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              trailing:
+                                                                  IconButton(
+                                                                onPressed: () {
+                                                                  launch(
+                                                                    "$fullServerUrl/surveys/${survey.surveyID}/answers?format=json",
+                                                                    headers: {
+                                                                      "Authorization":
+                                                                          "bearer ${getToken(context)}"
+                                                                    },
+                                                                  );
+                                                                },
+                                                                icon: Icon(
+                                                                  Icons
+                                                                      .download,
+                                                                  color: Colors
+                                                                      .orange,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                icon: Icon(
+                                                  Icons.download,
+                                                )),
                                           ),
                                         ],
                                       )

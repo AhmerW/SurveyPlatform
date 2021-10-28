@@ -51,7 +51,7 @@ routes: List[Route] = [
         gift_router,
     ),
     Route(
-        "captcha",
+        "captchas",
         captcha_router,
     ),
 ]

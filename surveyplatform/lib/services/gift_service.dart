@@ -7,11 +7,11 @@ import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/models/gift.dart';
 
 class GiftService {
-  static String serverPath = "/gifts";
+  static String serverPath = "/gifts/";
 
   Future<List<Item>> getUserClaimed({required String token}) async {
     ServerResponse response = await sendServerRequestAuthenticated(
-      "$serverPath/items/claims",
+      "$serverPath\items/claims",
       RequestType.Get,
       token: token,
     );

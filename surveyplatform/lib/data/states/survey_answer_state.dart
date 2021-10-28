@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/network.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/data/states/captcha_state.dart';
 import 'package:surveyplatform/data/states/survey_state.dart';
 import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/survey.dart';
@@ -110,6 +111,8 @@ class SurveyAnswerState extends ChangeNotifier {
             .getSurvey(
       survey_id,
     );
+    CaptchaState captchaState =
+        Provider.of<CaptchaState>(context, listen: false);
     if (survey == null) {
       return ServerResponse(
         {},
@@ -118,9 +121,18 @@ class SurveyAnswerState extends ChangeNotifier {
         error: Error("Survey does not exist"),
       );
     }
+    if (!captchaState.hasSolveId) {
+      return ServerResponse(
+        {},
+        ok: false,
+        statusCode: 400,
+        error: Error("Invalid captcha"),
+      );
+    }
     ServerResponse response = await GetIt.I<AnswerService>().postAnswer(
       survey_id,
       toJson(survey_id),
+      solve_token: captchaState.solve_token!,
       token: getToken(context),
     );
     if (response.ok) {

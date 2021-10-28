@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-DEV: Final[bool] = True
+DEV: Final[bool] = False
 base_path: Final[str] = "/api/v1"
 
 project = "SurveyPlatform"

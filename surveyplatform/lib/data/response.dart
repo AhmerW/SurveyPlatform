@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,7 @@ class ServerResponse {
   final bool ok;
   final String detail;
   final Map<String, dynamic> data;
+  final Uint8List? body_bytes;
   final Error? error;
   final int statusCode;
 
@@ -34,6 +36,7 @@ class ServerResponse {
     this.data, {
     required this.ok,
     required this.statusCode,
+    this.body_bytes,
     this.detail: "",
     this.error,
   });
@@ -71,12 +74,11 @@ class ServerResponse {
     try {
       Map<dynamic, dynamic> json = jsonDecode(response.body);
     } catch (error) {
-      return ServerResponse(
-        {},
-        ok: false,
-        statusCode: 400,
-        error: Error("Failed ${response.body}"),
-      );
+      return ServerResponse({},
+          ok: false,
+          statusCode: 400,
+          error: Error("Failed ${response.body}"),
+          body_bytes: response.bodyBytes);
     }
     Map<dynamic, dynamic> json = jsonDecode(response.body);
     print(json);

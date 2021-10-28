@@ -77,6 +77,7 @@ class AnswerQueries:
         JOIN QuestionAnswers 
         on QuestionAnswers.answer_id = SurveyAnswers.answer_id;
     """
+
     GetSurveyAnswers = """
         SELECT * FROM SurveyAnswers
         JOIN QuestionAnswers 

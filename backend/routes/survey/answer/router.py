@@ -1,8 +1,13 @@
-from typing import Generic, List, Optional, Union
+from typing import Any, Generic, List, Optional, Union
+from enum import Enum, auto
+
 from fastapi import APIRouter
 from fastapi.params import Depends
+from fastapi.responses import FileResponse, Response
+
 from pydantic.generics import GenericModel
 from pydantic.main import BaseModel
+from auth.captcha_service import requireSolvedCaptcha
 from data.services.answer_service import AnswerService
 
 from responses import BaseResponse, Error, Success
@@ -37,22 +42,53 @@ class AnswerResponse(BaseResponse):
     data: AnswerValueModel
 
 
+class SurveyAnswersFormat(Enum):
+    json = "json"
+    csv = "csv"
+
+
 @router.get(
-    "/{survey_id}/answers",
-    response_model=AnswerResponse,
+    "/{survey_id}/answers/",
 )
 async def getAnswers(
     survey_id: int,
     page: Optional[int] = None,
-    user: User = Depends(getAdmin),
+    format: SurveyAnswersFormat = SurveyAnswersFormat.json,
 ):
     answers: Union[SurveyAnswerOut, List[SurveyAnswerOut]] = list()
+    response = dict()
+    path: str = None
+    media_type = "text/json"
+    file_format = "json"
 
     async with AnswerService() as service:
+        await service.getSurvey(survey_id)
 
-        answers = await service.getAnswers(survey_id, page)
+        if format == SurveyAnswersFormat.csv:
+            response = await service.getRawAnswers(survey_id, page)
+        else:
+            answers = await service.getAnswers(survey_id, page)
+            response = AnswerResponse(data=AnswerValueModel(answers=answers))
 
-    return AnswerResponse(data=AnswerValueModel(answers=answers))
+    if format == SurveyAnswersFormat.csv:
+        path = await service.answersAsCSV(survey_id, response)
+        media_type = "text/csv"
+        file_format = "csv"
+
+    else:
+        path = await service.saveAnswersAsJson(
+            survey_id,
+            response.data.dict(),
+        )
+
+    if not path:
+        raise Error("Not saved")
+
+    return FileResponse(
+        path,
+        media_type=media_type,
+        filename=f"{survey_id}_answers.{file_format}",
+    )
 
 
 @router.get("/{survey_id}/answered")
@@ -67,13 +103,17 @@ async def isAnswered(
     return Success(dict(answered=answered))
 
 
-@router.post("/{survey_id}/answers/")
+@router.post(
+    "/{survey_id}/answers/",
+    dependencies=[
+        Depends(requireSolvedCaptcha),
+    ],
+)
 async def postAnswer(
     survey_id: int,
     answer: SurveyAnswerIn,
     user: Optional[User] = Depends(optionalUser),
 ):
-    print(user)
 
     async with AnswerService() as service:
         await service.submitAnswer(

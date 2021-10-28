@@ -1,6 +1,10 @@
+import os
+import json
 from time import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
+
+import pandas
 
 from data.db.queries import AnswerQueries, SurveyQueries
 from data.services.base import BaseService, StateContainer
@@ -76,6 +80,43 @@ class AnswerService(BaseService):
             answers,
             page=page,
         )
+
+    async def getRawAnswers(
+        self,
+        survey_id: int,
+        page: int = None,
+    ) -> List[Dict[Any, Any]]:
+        records = await self.fetchall(AnswerQueries.GetSurveyAnswers, (survey_id,))
+        if page is None:
+            return records
+
+        return paginateList(records, page)
+
+    async def answersAsCSV(
+        self,
+        survey_id: int,
+        answers: Dict[Any, Any],
+    ):
+        df = pandas.json_normalize(answers)
+        path = os.path.join("data", "raw", "answers", f"{survey_id}.csv")
+        df.to_csv(path)
+        return path
+
+    async def saveAnswersAsJson(
+        self,
+        survey_id: int,
+        answers: Dict[Any, Any],
+    ):
+        print(answers)
+        path = os.path.join("data", "raw", "answers", f"{survey_id}.json")
+        with open(path, "w+") as f:
+            json.dump(
+                answers,
+                f,
+                indent=4,
+            )
+
+        return path
 
     async def userHasAnswered(
         self,
@@ -197,10 +238,7 @@ class AnswerService(BaseService):
         uid: Optional[int] = None,
     ) -> SurveyAnswerOut:
 
-        ss = SurveyService(await self.con)
-        survey = await ss.getSurvey(survey_id)
-        if not survey:
-            raise Error("Survey does not exist")
+        survey = await self.getSurvey(survey_id)
 
         self.validateAnswer(answer, survey)
         if uid is not None:
@@ -221,3 +259,11 @@ class AnswerService(BaseService):
             await us.incrementPoints(uid, survey.points)
 
         return sao
+
+    async def getSurvey(self, survey_id: int) -> SurveyOut:
+        ss = SurveyService(await self.con)
+        survey = await ss.getSurvey(survey_id)
+        if not survey:
+            raise Error("Survey does not exist")
+
+        return survey

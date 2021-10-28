@@ -12,12 +12,16 @@ class AnswerService {
     int survey_id,
     Map<String, dynamic> answer, {
     required String token,
+    required String solve_token,
   }) {
     return sendServerRequestAuthenticated(
       constructPath(survey_id),
       RequestType.Post,
       data: jsonEncode(answer),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "solve_token": solve_token,
+      },
       token: token,
     );
   }

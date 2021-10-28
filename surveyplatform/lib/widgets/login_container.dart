@@ -15,9 +15,22 @@ class LoginContainer extends StatefulWidget {
 
 class _LoginContainerState extends State<LoginContainer> {
   TextEditingController _usernameController =
-      TextEditingController.fromValue(TextEditingValue(text: "admin"));
+      TextEditingController.fromValue(TextEditingValue(text: ""));
   TextEditingController _passwdController =
-      TextEditingController.fromValue(TextEditingValue(text: "xrYcpB3sZg_FPw"));
+      TextEditingController.fromValue(TextEditingValue(text: ""));
+
+  void attemptLogin() {
+    String username = _usernameController.text;
+    String password = _passwdController.text;
+
+    var asn = Provider.of<AuthStateNotifier>(context, listen: false);
+    if (username.isEmpty || password.isEmpty) {
+      asn.setState(AuthLoginState.EmptyData);
+    } else {
+      asn.setState(AuthLoginState.Attempting);
+      asn.login(context, username, password);
+    }
+  }
 
   @override
   void dispose() {
@@ -107,6 +120,7 @@ class _LoginContainerState extends State<LoginContainer> {
             "passord",
             _passwdController,
             hide: true,
+            onSubmit: attemptLogin,
           ),
           Container(
             padding: EdgeInsets.symmetric(
@@ -116,19 +130,7 @@ class _LoginContainerState extends State<LoginContainer> {
             width: MediaQuery.of(context).size.width * 0.4,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: HomePage.primaryColor),
-              onPressed: () {
-                String username = _usernameController.text;
-                String password = _passwdController.text;
-
-                var asn =
-                    Provider.of<AuthStateNotifier>(context, listen: false);
-                if (username.isEmpty || password.isEmpty) {
-                  asn.setState(AuthLoginState.EmptyData);
-                } else {
-                  asn.setState(AuthLoginState.Attempting);
-                  asn.login(context, username, password);
-                }
-              },
+              onPressed: attemptLogin,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,

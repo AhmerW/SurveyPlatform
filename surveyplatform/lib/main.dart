@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'dart:ui' as ui;
 
 import 'package:surveyplatform/data/states/auth_state.dart';
+import 'package:surveyplatform/data/states/captcha_state.dart';
 import 'package:surveyplatform/data/states/gift_state.dart';
 import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/data/states/survey_create_state.dart';
@@ -43,6 +44,7 @@ void main() {
       ChangeNotifierProvider(
         create: (_) => GiftStateNotifier(),
       ),
+      ChangeNotifierProvider(create: (_) => CaptchaState()),
     ],
     child: SurveyPlatform(),
   ));

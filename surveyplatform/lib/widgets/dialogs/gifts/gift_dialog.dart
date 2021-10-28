@@ -74,11 +74,7 @@ class __GiftDialogBuilderState extends State<_GiftDialogBuilder> {
         future: gsn.load(),
         builder: (contxet, snapshot) {
           List<Gift> gifts = (snapshot.data ?? <Gift>[]) as List<Gift>;
-          if (gifts.isEmpty) {
-            return Center(
-              child: Text("Ingen gaver.."),
-            );
-          }
+
           if (gifts.isNotEmpty) {
             return ListView.builder(
               itemCount: gifts.length,

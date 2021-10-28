@@ -11,12 +11,14 @@ class InputFieldState {
   final TextInputType inputType;
   final InputDecoration? customDecoration;
   final int? maxLength;
+  final Color? textColor;
 
   InputFieldState({
     this.inputType: TextInputType.text,
     this.hintText: "",
     this.fieldWidth: 0.8,
     this.customDecoration,
+    this.textColor,
     this.maxLength,
   });
 
@@ -79,7 +81,7 @@ class _InputFieldState extends State<InputField> {
                   color: Colors.grey,
                 )),
         style: TextStyle(
-          color: Colors.white,
+          color: widget._state.textColor ?? Colors.white,
         ),
       ),
     );

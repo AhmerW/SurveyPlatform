@@ -1,6 +1,6 @@
 # surveyplatform
 
-A new Flutter project.
+Surveylatform
 
 ## Getting Started
 

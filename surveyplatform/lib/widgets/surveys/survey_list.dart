@@ -10,6 +10,7 @@ import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/services/survey_service.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/surveys/survey_answer.dart';
+import 'package:surveyplatform/widgets/dialogs/captcha_dialog.dart';
 
 class SurveyList extends StatefulWidget {
   const SurveyList({Key? key}) : super(key: key);
@@ -148,6 +149,14 @@ class _SurveyListState extends State<SurveyList> {
                                     ),
                                   ),
                                   Spacer(),
+                                  IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                CaptchaDialog());
+                                      },
+                                      icon: Icon(Icons.device_hub)),
                                   OutlinedButton(
                                       onPressed: () => Navigator.of(context)
                                           .push(MaterialPageRoute(

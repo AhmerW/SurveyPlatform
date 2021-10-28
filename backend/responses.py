@@ -11,7 +11,7 @@ from pydantic.main import BaseModel
 from globals import app
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(frozen=True)
 class InternalServiceResponse:
     success: Optional[bool] = False
     msg: Optional[str] = ""
