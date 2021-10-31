@@ -22,7 +22,6 @@ credentials_exception = Error("Invalid credentials")
 
 
 async def getUser(token: str = Depends(oauth2_scheme)) -> User:
-    print(token)
     payload = decodeToken(
         token,
         default=dict(),

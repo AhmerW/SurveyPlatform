@@ -13,7 +13,7 @@ from fastapi_mail.schemas import MessageSchema
 from data.models import User
 
 load_dotenv(".env")
-_CONF = ConnectionConfig(
+EMAIL_CONF = ConnectionConfig(
     MAIL_USERNAME="surveyplatform.mail@gmail.com",
     MAIL_PASSWORD=os.getenv("email-pass"),
     MAIL_FROM="surveyplatform.mail@gmail.com",
@@ -83,7 +83,7 @@ class UserRegistrator:
         entry: Optional[VerEntry] = self._entries.get(uid)
         if entry is None:
             return False
-        print(code, entry.code)
+
         return (uid == entry.uid) and secrets.compare_digest(code, entry.code)
 
     def verify(self, uid: int, code: str) -> bool:
@@ -109,7 +109,7 @@ class UserRegistrator:
             body=html.format(code=entity.code),
             subtype="html",
         )
-        fm = FastMail(_CONF)
+        fm = FastMail(EMAIL_CONF)
         await fm.send_message(msg)
         return True
 

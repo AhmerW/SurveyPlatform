@@ -11,21 +11,35 @@ class CaptchaState extends ChangeNotifier {
 
   String? get captcha_id => _captcha_id;
   String? get solve_token => _solve_token;
-  bool get hasSolveId => _solve_token != null;
+  bool get hasSolveToken => _solve_token != null;
+
+  Image? _image;
+
+  void reset() {
+    _image = null;
+    _captcha_id = null;
+  }
 
   void usedSolveToken() {
     _solve_token = null;
+    _image = null;
+    _captcha_id = null;
     notifyListeners();
   }
 
   Future<Image?> getCaptcha() async {
+    if (_image != null) return _image;
     ServerResponse response = await sendServerRequest(path, RequestType.Get);
 
     if (response.body_bytes == null) {
       return null;
     }
+    if (response.headers.containsKey("captcha-id")) {
+      if (_captcha_id == null) _captcha_id = response.headers["captcha-id"];
+    }
 
-    return Image.memory(response.body_bytes!);
+    _image = Image.memory(response.body_bytes!);
+    return _image;
   }
 
   Future<ServerResponse> solveCaptcha(int value) async {
@@ -36,6 +50,8 @@ class CaptchaState extends ChangeNotifier {
       headers: {"Content-Type": "application/json"},
     );
     if (response.ok) {
+      _image = null;
+      _captcha_id = null;
       _solve_token = response.data["solve_token"];
     }
 

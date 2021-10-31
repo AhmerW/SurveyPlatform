@@ -15,7 +15,6 @@ class GiftStateNotifier extends ChangeNotifier {
   List<Gift> get gifts => _gifts;
 
   void refresh() async {
-    print("rfreshisssng");
     _loaded = false;
     _gifts.clear();
     _items.clear();
@@ -86,14 +85,13 @@ class GiftStateNotifier extends ChangeNotifier {
   }
 
   void addGiftItem(Item item) {
-    print("ADDING GIFT ITEM: $item");
     if (!_items.containsKey(item.giftID)) {
       _items[item.giftID] = [item];
     } else {
       _items[item.giftID]!.add(item);
       try {
         Gift gift = _gifts.singleWhere((gift) => gift.giftID == item.giftID);
-        print(gift.title);
+
         gift.itemCount += 1;
         notifyListeners();
       } catch (err) {}

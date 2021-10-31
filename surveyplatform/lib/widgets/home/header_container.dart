@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:surveyplatform/views/home.dart';
@@ -47,10 +48,7 @@ class _HomePageHeaderState extends State<HomePageHeader> {
                     elevation: 20,
                     child: Container(
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => LoginPage()));
-                        },
+                        onPressed: () => GoRouter.of(context).go("/login"),
                         child: Text("Begynn nå"),
                       ),
                     ),

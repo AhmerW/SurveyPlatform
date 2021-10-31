@@ -1,4 +1,4 @@
-from typing import Generic, List, Optional
+from typing import Generic, List, Optional, Union
 from fastapi import APIRouter
 from fastapi.params import Depends
 from pydantic.generics import GenericModel
@@ -24,7 +24,12 @@ from routes.survey.answer.router import router as answer_router
 router = APIRouter()
 
 
-SurveyValueModel = ValueModel.new(surveys=(List[SurveyOut], ...))
+SurveyValueModel = ValueModel.new(surveys=(Union[List[SurveyOut], SurveyOut], ...))
+OptionalSurveyIDValueModel = ValueModel.new(survey=(OptionalSurveyID, ...))
+
+
+class OptionalSurveyIDResponse(BaseResponse):
+    data: OptionalSurveyIDValueModel
 
 
 class SurveyResponse(BaseResponse):
@@ -32,19 +37,38 @@ class SurveyResponse(BaseResponse):
 
 
 @router.get(
+    "/{surveyid}",
+    response_model=SurveyResponse,
+)
+@router.get(
+    "/{surveyid}/",
+    response_model=SurveyResponse,
+)
+@router.get(
     "/",
     response_model=SurveyResponse,
 )
-async def getSurveys(page: int = 1):
-    surveys: List[SurveyOut] = list()
+async def getSurveys(
+    surveyid: int = None,
+    page: int = 1,
+):
+    surveys: Union[List[SurveyOut], SurveyOut] = list()
 
     async with SurveyService() as service:
-        surveys = await service.getSurveys(page)
+        if surveyid is not None:
+            surveys = await service.getSurvey(surveyid)
+            if surveys is None:
+                raise Error("Survey not found")
+        else:
+            surveys = await service.getSurveys(page)
 
     return SurveyResponse(data=SurveyValueModel(surveys=surveys))
 
 
-@router.post("/")
+@router.post(
+    "/",
+    response_model=OptionalSurveyIDResponse,
+)
 async def createSurvey(
     survey: OptionalSurveyID,
     _: User = Depends(getAdmin),
@@ -55,14 +79,15 @@ async def createSurvey(
             so = await service.createSurvey(survey)
         else:
             await service.updateSurvey(survey)
-            return Success(
-                detail="If there is a survey with that ID, it has been updated."
+            return OptionalSurveyIDResponse(
+                data=OptionalSurveyIDValueModel(survey=survey),
+                detail="If there was a survey with that ID, it has been updated.",
             )
 
     if not so:
         raise Error("Invalid survey data")
 
-    return Success(dict(id=so.survey_id))
+    return OptionalSurveyIDResponse(data=OptionalSurveyIDValueModel(survey=so))
 
 
 @router.delete(

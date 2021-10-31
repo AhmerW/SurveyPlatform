@@ -7,11 +7,11 @@ import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/models/gift.dart';
 
 class GiftService {
-  static String serverPath = "/gifts/";
+  static String serverPath = "/gifts";
 
   Future<List<Item>> getUserClaimed({required String token}) async {
     ServerResponse response = await sendServerRequestAuthenticated(
-      "$serverPath\items/claims",
+      "$serverPath/items/claims",
       RequestType.Get,
       token: token,
     );
@@ -27,7 +27,7 @@ class GiftService {
 
   Future<List<Gift>> getGifts() async {
     ServerResponse response =
-        await sendServerRequest(serverPath, RequestType.Get);
+        await sendServerRequest("$serverPath/", RequestType.Get);
     List<dynamic> result = (response.data["gifts"] ?? []);
 
     List<Map<String, dynamic>> parsed = result
@@ -121,7 +121,7 @@ class GiftService {
     required String token,
   }) async {
     return await sendServerRequestAuthenticated(
-      '/gifts/${gift.giftID}/items/claims',
+      '$serverPath/${gift.giftID}/items/claims',
       RequestType.Post,
       token: token,
     );

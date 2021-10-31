@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:surveyplatform/main.dart';
@@ -97,6 +98,43 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+      Container(
+        height: 300,
+        color: Color(0xFF1E272E),
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Hva venter du på?",
+              style: GoogleFonts.merriweather(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 50),
+              child: ElevatedButton(
+                onPressed: () {
+                  GoRouter.of(context).go("/login");
+                },
+                child: Row(
+                  children: [
+                    Text("Begynn å tjen penger!",
+                        style: TextStyle(
+                          color: Colors.white,
+                        )),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.arrow_right_alt_outlined),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
       FAQContainer()
     ];
 
@@ -149,19 +187,16 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => LoginPage()));
-                            },
-                            child: Text("Logg inn")),
+                          onPressed: () => GoRouter.of(context).push("/login"),
+                          child: Text("Logg inn"),
+                        ),
                       ),
                       Container(
                         child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => RegisterPage()));
-                            },
-                            child: Text("Lag konto")),
+                          onPressed: () =>
+                              GoRouter.of(context).push("/register"),
+                          child: Text("Lag konto"),
+                        ),
                       )
                     ],
                   ),
@@ -198,10 +233,8 @@ class _HomePageState extends State<HomePage> {
                             height: 50,
                             width: MediaQuery.of(context).size.width * 0.8,
                             child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => LoginPage()));
-                                },
+                                onPressed: () =>
+                                    GoRouter.of(context).go("/login"),
                                 child: Text("Logg inn")),
                           ),
                           SizedBox(

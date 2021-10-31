@@ -131,7 +131,8 @@ class _GiftItemServiceImplementation(BaseService):
         item.claimed = True
 
         await self.execute(GiftQueries.ClaimGiftItem, (user.uid, item.item_id))
-        self.state._claimed[gift_id].append(item)
+        self.appendItem(item, self.state._claimed)
+
         return item
 
     async def getItems(
@@ -142,7 +143,7 @@ class _GiftItemServiceImplementation(BaseService):
 
         await self.ensureUpdated(gift_id)
         items = self.state._items.get(gift_id)
-        print(f"{self._state._items=}")
+
         if not gift_id in self.state._items:
             raise Error(msg="Gift does not exist")
 
@@ -235,8 +236,6 @@ class _GiftItemServiceImplementation(BaseService):
         await self.ensureUpdated(gift_id)
         items = self.state._items.get(gift_id)
 
-        print(self.state._items)
-
         if items is None:
             raise Error("Gift does not exist")
 
@@ -272,7 +271,7 @@ class _GiftServiceImplementation(BaseService):
         if refresh or not self.state._gifts:
 
             gifts = await self.fetchall(GiftQueries.GetGifts)
-            print(gifts)
+
             self.state._gifts = [GiftOut(**gift) for gift in gifts]
 
         return self.state._gifts

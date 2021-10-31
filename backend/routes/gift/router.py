@@ -230,7 +230,7 @@ async def getItemClaims(
     async with GiftService() as service:
 
         if user.admin and gift_id is not None:
-            print("getting claims")
+
             claims = await service.getGiftClaims(gift_id)
         else:
             claims = await service.itemService.getUserClaims(user.uid)

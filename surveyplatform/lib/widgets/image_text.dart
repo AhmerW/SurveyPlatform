@@ -27,7 +27,7 @@ class _ImageTextState extends State<ImageText> {
           ? null
           : widget.imageAtRight
               ? EdgeInsets.only(right: 50)
-              : EdgeInsets.only(left: 50),
+              : EdgeInsets.only(left: 60),
       child: RichText(
         text: TextSpan(
           style: GoogleFonts.notoSans(color: Colors.white),
@@ -59,22 +59,24 @@ class _ImageTextState extends State<ImageText> {
       ),
     );
 
-    return Flex(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: isSmallWidth
-          ? MainAxisAlignment.center
-          : MainAxisAlignment.spaceAround,
-      mainAxisSize: MainAxisSize.min,
-      direction: isSmallWidth ? Axis.vertical : Axis.horizontal,
-      children: isSmallWidth
-          ? [
-              image,
-              Container(
-                  padding: EdgeInsets.only(bottom: 20), child: textWidget),
-            ]
-          : widget.imageAtRight
-              ? [textWidget, image]
-              : [image, textWidget],
+    return Container(
+      child: Flex(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: isSmallWidth
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        direction: isSmallWidth ? Axis.vertical : Axis.horizontal,
+        children: isSmallWidth
+            ? [
+                image,
+                Container(
+                    padding: EdgeInsets.only(bottom: 20), child: textWidget),
+              ]
+            : widget.imageAtRight
+                ? [textWidget, image]
+                : [image, textWidget],
+      ),
     );
   }
 }

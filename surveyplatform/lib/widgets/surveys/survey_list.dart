@@ -96,7 +96,8 @@ class _SurveyListState extends State<SurveyList> {
                               if (!value) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => SurveyAnswerPage(survey),
+                                    builder: (_) => SurveyAnswerPage(
+                                        SurveyAnswerPageData(survey)),
                                   ),
                                 );
                               } else {
@@ -111,7 +112,8 @@ class _SurveyListState extends State<SurveyList> {
                           } else if (asn.isGuest) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => SurveyAnswerPage(survey),
+                                builder: (_) => SurveyAnswerPage(
+                                    SurveyAnswerPageData(survey)),
                               ),
                             );
                           }
@@ -149,19 +151,12 @@ class _SurveyListState extends State<SurveyList> {
                                     ),
                                   ),
                                   Spacer(),
-                                  IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                CaptchaDialog());
-                                      },
-                                      icon: Icon(Icons.device_hub)),
                                   OutlinedButton(
                                       onPressed: () => Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                              builder: (_) =>
-                                                  SurveyAnswerPage(survey))),
+                                              builder: (_) => SurveyAnswerPage(
+                                                  SurveyAnswerPageData(
+                                                      survey)))),
                                       child: Text("Svar"))
                                 ],
                               ),

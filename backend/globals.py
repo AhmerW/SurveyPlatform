@@ -7,10 +7,16 @@ from passlib.context import CryptContext
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-DEV: Final[bool] = False
+DEV: Final[bool] = True
 base_path: Final[str] = "/api/v1"
 
-project = "SurveyPlatform"
+
+if DEV:
+    server_url = "http://localhost:8000/"
+else:
+    server_url = "https://surveyplatform.net/#/"
+
+
 app = FastAPI(
     root_path=None if DEV else base_path,
     openapi_url=None,

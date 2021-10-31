@@ -16,6 +16,11 @@ from responses import Success
 router = APIRouter()
 
 
+class CaptchaIn(BaseModel):
+    captcha_id: str
+    value: int
+
+
 @router.get("/")
 async def getCaptcha():
     captcha = captchaService.createCaptcha()
@@ -33,45 +38,9 @@ async def getCaptcha():
     )
 
 
-class CaptchaIn(BaseModel):
-    captcha_id: str
-    value: int
-
-
 @router.post("/")
-async def verifyCaptcha(captcha: CaptchaIn):
+async def solveCaptcha(captcha: CaptchaIn):
 
-    response = captchaService.processCaptcha(captcha.captcha_id, captcha.value)
+    response = captchaService.solve(captcha.captcha_id, captcha.value)
 
-    return Success(dict(solve_token=response))
-
-
-@router.get("/test")
-async def testCaptcha(token: str = Depends(requireSolvedCaptcha)):
-    return token
-
-
-"""
-    <html>
-  <head>
-    <title>hCaptcha</title>
-    <script src="https://hcaptcha.com/1/api.js" async defer></script>
-  </head>
-  <body style='background-color: none;'>
-    <div style='height: 60px;'></div>
-    <form action="?" method="POST">
-      <div class="h-captcha" 
-        data-sitekey="{sitekey}"
-        data-callback="captchaCallback"></div>
-
-    </form>
-    <script>
-      function captchaCallback(response) {{
-        if (typeof Captcha!=="undefined") {{
-          Captcha.postMessage(response);
-        }}
-      }}
-    </script>
-  </body>
-</html>
-    """
+    return Success(dict(solve_token=response), detail="Captcha solved")

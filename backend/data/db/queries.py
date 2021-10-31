@@ -43,6 +43,9 @@ class UserQueries:
     FromUsername = """
         SELECT * FROM Users WHERE username = ?
     """
+    FromUsernameOrEmail = """
+        SELECT * FROM Users WHERE username = ? or email = ?;
+    """
     FromUid = """
         SELECT * FROM Users WHERE uid = ?
     """
@@ -58,7 +61,10 @@ class UserQueries:
         INSERT INTO Users(username, email, password) VALUES(?, ?, ?)
     """
     UpdateVerificationState = """
-        UPDATE Users set verified = ? where uid = ?
+        UPDATE Users set verified = ? WHERE uid = ?
+    """
+    UpdatePassword = """
+        UPDATE Users set password = ? WHERE uid = ?;
     """
 
 

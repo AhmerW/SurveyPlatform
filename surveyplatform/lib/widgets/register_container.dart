@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
@@ -118,10 +119,12 @@ class _RegisterContainerState extends State<RegisterContainer> {
                         });
                       } else {
                         String? token = response.data["token"];
-                        print(token);
+
                         if (token != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => VerificationPage(token)));
+                          GoRouter.of(context).go(
+                            "/verification",
+                            extra: token,
+                          );
                         }
                       }
                     });
@@ -131,10 +134,7 @@ class _RegisterContainerState extends State<RegisterContainer> {
           Divider(),
           Container(
             child: InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => LoginPage()));
-              },
+              onTap: () => GoRouter.of(context).go("/login"),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,

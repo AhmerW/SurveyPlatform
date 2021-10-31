@@ -83,8 +83,7 @@ class Survey {
           .toList()
         ..removeWhere((question) => !question.isValid),
     );
-    print("SURVEY QUESTIONS: ${survey.questions}");
-    print("TRY PARSE SQ: ${questions.map((e) => Question.fromJson(e))}");
+
     return survey;
   }
 
@@ -95,7 +94,7 @@ class Survey {
       "points": points,
       "questions": questions.map((question) => question.toJson()).toList()
     };
-    print("JSON: $j");
+
     return j;
   }
 }

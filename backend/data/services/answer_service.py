@@ -107,7 +107,7 @@ class AnswerService(BaseService):
         survey_id: int,
         answers: Dict[Any, Any],
     ):
-        print(answers)
+
         path = os.path.join("data", "raw", "answers", f"{survey_id}.json")
         with open(path, "w+") as f:
             json.dump(
@@ -125,9 +125,8 @@ class AnswerService(BaseService):
     ) -> bool:
         if uid in self.state._answers.get(survey_id, list()):
             return True
-        print(f"Checking {survey_id} and {uid}")
+
         record = await self.fetchone(AnswerQueries.GetUserAnswer, (survey_id, uid))
-        print(record)
 
         if not record:
             return False

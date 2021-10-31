@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/response.dart';
@@ -125,13 +126,12 @@ class _SurveyCreatePageState extends State<SurveyCreatePage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 postSurvey(false).then((response) {
-                                  print("POSTED");
                                   if (response.ok)
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (_) => HubPage(
-                                                  didPublishSurvey: true,
-                                                )));
+                                    GoRouter.of(context).go(
+                                      "/hub",
+                                      extra:
+                                          HubPageData(didPublishSurvey: true),
+                                    );
                                 });
                               },
                               child: Text("Publiser"),

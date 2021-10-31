@@ -25,6 +25,7 @@ class ServerResponse {
   final bool ok;
   final String detail;
   final Map<String, dynamic> data;
+  final Map<String, dynamic> headers;
   final Uint8List? body_bytes;
   final Error? error;
   final int statusCode;
@@ -36,16 +37,16 @@ class ServerResponse {
     this.data, {
     required this.ok,
     required this.statusCode,
+    this.headers: const {},
     this.body_bytes,
     this.detail: "",
     this.error,
   });
 
   factory ServerResponse.parse(Map<dynamic, dynamic> json, int statusCode) {
-    ;
     var data = json['data'];
     var error = json['error'];
-    var detail = json['string'] ?? "";
+    var detail = json['detail'] ?? "";
     int status = statusCode;
 
     if (isNullOrNMap(data)) {
@@ -64,7 +65,7 @@ class ServerResponse {
     return ServerResponse(
       data as Map<String, dynamic>,
       detail: detail,
-      error: Error(error["msg"] ?? ""),
+      error: error["msg"] == null ? null : Error(error["msg"] ?? ""),
       statusCode: status,
       ok: json["ok"] ?? false,
     );
@@ -74,14 +75,16 @@ class ServerResponse {
     try {
       Map<dynamic, dynamic> json = jsonDecode(response.body);
     } catch (error) {
-      return ServerResponse({},
-          ok: false,
-          statusCode: 400,
-          error: Error("Failed ${response.body}"),
-          body_bytes: response.bodyBytes);
+      return ServerResponse(
+        {},
+        ok: false,
+        statusCode: 400,
+        error: Error("Failed ${response.body}"),
+        body_bytes: response.bodyBytes,
+        headers: response.headers,
+      );
     }
     Map<dynamic, dynamic> json = jsonDecode(response.body);
-    print(json);
 
     return ServerResponse.parse(json, response.statusCode);
   }

@@ -7,6 +7,7 @@ class FAQContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(top: 200),
       height: 1000,
       child: Column(
         children: [

@@ -204,8 +204,6 @@ class _GiftCreateItemDialogState extends State<_GiftCreateItemDialog> {
               )
                   .then((value) {
                 if (value.ok) {
-                  print("Value is OK");
-
                   Navigator.pop(context);
                 } else if (value.hasError) {
                   setState(() {

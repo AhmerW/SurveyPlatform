@@ -81,9 +81,11 @@ class _AdminSurveyListState extends State<AdminSurveyList> {
                       elevation: 30,
                       borderRadius: BorderRadius.circular(20),
                       child: InkWell(
-                        onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => SurveyAnswerPage(survey))),
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => SurveyAnswerPage(
+                                      SurveyAnswerPageData(survey),
+                                    ))),
                         onHover: (isHovering) {
                           setState(() {
                             surveyStates[survey.surveyID] =

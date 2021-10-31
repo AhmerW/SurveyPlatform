@@ -103,9 +103,11 @@ class CaptchaService:
         return captcha
 
     def calculateCaptcha(self, captcha: Captcha) -> int:
+
         if captcha.operation == CaptchaOperation.add:
             return operator.add(captcha.n1, captcha.n2)
         elif captcha.operation == CaptchaOperation.sub:
+
             return operator.sub(captcha.n1, captcha.n2)
 
         return 0
@@ -115,16 +117,14 @@ class CaptchaService:
         captcha: Captcha,
         value: int,
     ) -> bool:
-        return isinstance(value, int) and value == self.calculateCaptcha(captcha)
+
+        return isinstance(value, int) and (value == self.calculateCaptcha(captcha))
 
     def processCaptcha(
         self,
-        captcha_id: str,
+        captcha: Captcha,
         value: int,
     ):
-        captcha = self.state._captchas.get(captcha_id)
-        if captcha is None:
-            raise Error("Captcha does not exist")
 
         if not self.captchaIsValid(captcha, value):
             raise Error("Invalid Captcha")
@@ -132,10 +132,12 @@ class CaptchaService:
         self.state._captchas.pop(captcha.id)
         return self.generateToken()
 
-    def solve(self, captcha_id: int, value: int) -> bool:
+    def solve(self, captcha_id: str, value: int) -> bool:
+
         captcha: Optional[Captcha] = self.state._captchas.get(captcha_id)
         if captcha is None:
-            raise Error("Invalid Captcha")
+
+            raise Error("Captcha does not exist")
 
         return self.processCaptcha(captcha, value)
 

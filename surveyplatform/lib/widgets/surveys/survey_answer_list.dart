@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:surveyplatform/data/states/captcha_state.dart';
 import 'package:surveyplatform/data/states/survey_answer_state.dart';
 import 'package:surveyplatform/models/survey.dart';
 import 'package:surveyplatform/views/home.dart';
+import 'package:surveyplatform/widgets/dialogs/captcha_dialog.dart';
 import 'package:surveyplatform/widgets/dialogs/submit_survey_answer_dialog.dart';
 import 'package:surveyplatform/widgets/surveys/survey_answer_question.dart';
 
@@ -86,11 +88,9 @@ class _SurveyAnswerListState extends State<SurveyAnswerList> {
                               padding: EdgeInsets.only(top: 20),
                               child: Consumer<SurveyAnswerState>(
                                 builder: (context, sas, _) {
-                                  print(question.widget_values);
                                   QuestionAnswer? answer = sas.getAnswer(
                                       widget.survey.surveyID,
                                       question.questionID);
-                                  print("QA final: $answer");
 
                                   if (answer != null) {
                                     return SaqGetWidget(
@@ -183,12 +183,24 @@ class __SurveyAnswerDoneState extends State<_SurveyAnswerDone> {
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: OutlinedButton(
                     onPressed: () {
+                      CaptchaState captchaState =
+                          Provider.of<CaptchaState>(context, listen: false);
+
                       showDialog(
-                        context: context,
-                        builder: (context) => SubmitSurveyAnswerDialog(
-                          widget.survey.surveyID,
-                        ),
-                      ).then((value) => Navigator.of(context).pop());
+                          context: context,
+                          builder: (context) => CaptchaDialog()).then((_) {
+                        if (captchaState.hasSolveToken)
+                          showDialog(
+                            context: context,
+                            builder: (context) => SubmitSurveyAnswerDialog(
+                              widget.survey.surveyID,
+                            ),
+                          ).then((value) {});
+                        else
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Vennligst løs Captcha før du fortsetter")));
+                      });
                     },
                     child: Text("Send svar"),
                   ),

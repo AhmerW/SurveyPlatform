@@ -111,8 +111,14 @@ class SurveyAnswerState extends ChangeNotifier {
             .getSurvey(
       survey_id,
     );
-    CaptchaState captchaState =
-        Provider.of<CaptchaState>(context, listen: false);
+    CaptchaState captchaState = Provider.of<CaptchaState>(
+      context,
+      listen: false,
+    );
+    AuthStateNotifier asn = Provider.of<AuthStateNotifier>(
+      context,
+      listen: false,
+    );
     if (survey == null) {
       return ServerResponse(
         {},
@@ -121,7 +127,7 @@ class SurveyAnswerState extends ChangeNotifier {
         error: Error("Survey does not exist"),
       );
     }
-    if (!captchaState.hasSolveId) {
+    if (!captchaState.hasSolveToken) {
       return ServerResponse(
         {},
         ok: false,
@@ -134,12 +140,9 @@ class SurveyAnswerState extends ChangeNotifier {
       toJson(survey_id),
       solve_token: captchaState.solve_token!,
       token: getToken(context),
+      isGuest: asn.isGuest,
     );
     if (response.ok) {
-      AuthStateNotifier asn = Provider.of<AuthStateNotifier>(
-        context,
-        listen: false,
-      );
       if (asn.isUser) {
         asn.setPoints(
           asn.user.points + survey.points,

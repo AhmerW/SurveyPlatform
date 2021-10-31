@@ -48,6 +48,19 @@ class UserService(BaseService):
         except:
             return None
 
+    async def userFromUsernameOrEmail(
+        self,
+        value: str,
+        full=False,
+    ) -> Optional[Union[User, UserFull]]:
+        raw = await self.fetchone(UserQueries.FromUsernameOrEmail, (value, value))
+        if not raw:
+            return None
+        try:
+            return UserFull(**raw) if full else User(**raw)
+        except:
+            return None
+
     async def userFromUsername(
         self,
         username: str,
@@ -75,6 +88,15 @@ class UserService(BaseService):
             UserQueries.UpdatePoints,
             (
                 points,
+                uid,
+            ),
+        )
+
+    async def setPassword(self, uid: int, password: str):
+        await self.execute(
+            UserQueries.UpdatePassword,
+            (
+                password,
                 uid,
             ),
         )

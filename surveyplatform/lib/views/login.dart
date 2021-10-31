@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/widgets/login_container.dart';
 
@@ -31,8 +32,7 @@ class _HomePageState extends State<LoginPage> {
                 ? SizedBox.shrink()
                 : InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => HomePage()));
+                      GoRouter.of(context).go("/home");
                     },
                     child: Container(
                       alignment: Alignment.topLeft,

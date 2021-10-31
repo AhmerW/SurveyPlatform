@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
@@ -13,10 +14,16 @@ import 'package:surveyplatform/widgets/surveys/survey_container.dart';
 import 'package:surveyplatform/widgets/surveys/survey_list.dart';
 import 'package:surveyplatform/widgets/surveys/surveysearch_container.dart';
 
+class HubPageData {
+  final bool didPublishSurvey;
+
+  const HubPageData({this.didPublishSurvey: false});
+}
+
 // HubView
 class HubPage extends StatefulWidget {
-  final bool didPublishSurvey;
-  const HubPage({this.didPublishSurvey: false});
+  final HubPageData data;
+  const HubPage({this.data: const HubPageData()});
 
   @override
   _HubPageState createState() => _HubPageState();
@@ -26,19 +33,20 @@ class _HubPageState extends State<HubPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.didPublishSurvey);
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (widget.didPublishSurvey) {
+      if (widget.data.didPublishSurvey) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Publisering vellykket!")));
       }
       AuthStateNotifier asn =
           Provider.of<AuthStateNotifier>(context, listen: false);
-      print("ASN: ${asn.user} TOKEN ${asn.token}");
+
       if (!asn.user.verified) {
-        Future.microtask(() => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => VerificationPage(asn.token))));
+        Future.microtask(() => GoRouter.of(context).go(
+              "/verification",
+              extra: asn.token,
+            ));
       }
     });
   }
@@ -62,6 +70,9 @@ class _HubPageState extends State<HubPage> {
               ),
         centerTitle: true,
         actions: [
+          IconButton(
+              onPressed: () => GoRouter.of(context).go("/home"),
+              icon: Icon(Icons.home, color: HomePage.primaryColor)),
           Provider.of<AuthStateNotifier>(context).user.admin
               ? IconButton(
                   onPressed: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/network.dart';
 import 'package:surveyplatform/data/response.dart';
@@ -65,7 +66,7 @@ class AuthStateNotifier extends ChangeNotifier {
     this._session = false;
     setState(AuthLoginState.None);
     if (context != null) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => LoginPage()));
+      GoRouter.of(context).go("/login");
     }
   }
 
@@ -80,7 +81,7 @@ class AuthStateNotifier extends ChangeNotifier {
 
       updateAuthState(user, response.token);
       this._state = AuthLoginState.None;
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => HubPage()));
+      GoRouter.of(context).go("/hub");
     }
   }
 

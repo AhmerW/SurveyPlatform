@@ -40,8 +40,6 @@ class NewSurveyState extends ChangeNotifier {
   }
 
   Survey asSurvey({bool draft: false}) {
-    print("as survey");
-
     return Survey(_updateID,
         title: title,
         questions: qs.questions.map((qs) => qs.question).toList(),
@@ -80,11 +78,15 @@ class NewSurveyState extends ChangeNotifier {
       ).token,
     );
     if (response.ok) {
-      Provider.of<SurveyStateNotifier>(context, listen: false)
-          .addSurvey(survey);
+      Survey? s = response.data["survey"] == null
+          ? null
+          : Survey.fromJson(response.data["survey"]);
+      print("fetched: $s");
+      Provider.of<SurveyStateNotifier>(context, listen: false).addSurvey(
+        s ?? survey,
+      );
       if (draft) {
         _updateID = response.data["id"] ?? Survey.invalidID;
-        print("updated id $_updateID");
       } else {
         clear();
       }
@@ -106,7 +108,6 @@ class NewSurveyQuestionState {
         values: getQuestionValues(widget),
       ),
     );
-    print("widget added, with ${getQuestionValues(widget)}");
   }
 
   void removeQuestion(int index) {

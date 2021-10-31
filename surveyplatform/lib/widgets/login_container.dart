@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/views/hub.dart';
 import 'package:surveyplatform/views/register.dart';
+import 'package:surveyplatform/widgets/dialogs/forgot_password_dialog.dart';
 import 'package:surveyplatform/widgets/lfield.dart';
 
 class LoginContainer extends StatefulWidget {
@@ -30,6 +32,18 @@ class _LoginContainerState extends State<LoginContainer> {
       asn.setState(AuthLoginState.Attempting);
       asn.login(context, username, password);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        Provider.of<AuthStateNotifier>(context, listen: false).setState(
+          AuthLoginState.None,
+        );
+      });
+    });
   }
 
   @override
@@ -141,6 +155,33 @@ class _LoginContainerState extends State<LoginContainer> {
           // OTHER FIELDS
           Container(
             padding: EdgeInsets.symmetric(
+              vertical: 3,
+            ),
+            child: InkWell(
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => LoginForgotPasswordDialog(),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Glemt passord?",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Icon(
+                    Icons.lock_outline,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
               vertical: 20,
             ),
             child: InkWell(
@@ -148,11 +189,7 @@ class _LoginContainerState extends State<LoginContainer> {
                 Provider.of<AuthStateNotifier>(context, listen: false)
                     .updateAuthStateGuest();
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => HubPage(),
-                  ),
-                );
+                GoRouter.of(context).push("/hub");
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -166,7 +203,7 @@ class _LoginContainerState extends State<LoginContainer> {
                     ),
                   ),
                   Icon(
-                    Icons.lock,
+                    Icons.lock_open,
                   ),
                 ],
               ),
@@ -190,7 +227,7 @@ class _LoginContainerState extends State<LoginContainer> {
                     ),
                   ),
                   Icon(
-                    Icons.account_circle,
+                    Icons.account_circle_outlined,
                   )
                 ],
               ),

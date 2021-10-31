@@ -114,7 +114,7 @@ class BaseService(metaclass=_ResponseCheckMeta):
         return self
 
     async def __aexit__(self, *_, **__) -> None:
-        print(f"CONNECTION: {self._con}")
+
         if self._autoclose and isinstance(self._con, aiosqlite.Connection):
             await self._con.close()
 

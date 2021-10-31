@@ -39,7 +39,6 @@ class _SliderWidgetState extends State<SliderWidget> {
         _min = getMin();
         _max = getMax();
         _value = _min;
-        print("min: $_min, max: $_max, value: $_value");
       });
     });
   }
@@ -117,7 +116,6 @@ class _SliderWidgetState extends State<SliderWidget> {
             fieldWidth: 0.2,
           ),
           onSubmit: (value) {
-            print("divisions: $value");
             int? divisions = int.tryParse(value);
             if (divisions != null) {
               setState(() {

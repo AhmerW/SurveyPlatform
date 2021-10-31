@@ -46,7 +46,6 @@ class AuthService {
   }
 
   Future<UserResponse?> login(String username, String password) async {
-    print("LOGGING IN");
     var response = await sendServerRequest(
       endpoint,
       RequestType.Post,
@@ -58,9 +57,8 @@ class AuthService {
     }
     String? token = response.data["token"];
     if (token != null) {
-      print("NNT");
       User? user = await getUser(token);
-      print("GOT USER: $user");
+
       if (user != null) return UserResponse(user, token);
     }
   }
@@ -75,7 +73,6 @@ class AuthService {
   }
 
   Future<ServerResponse> sendMail(String token) async {
-    print("SENDING EMAIL $token");
     return await sendServerRequestAuthenticated(
       "/users/verification/",
       RequestType.Get,
@@ -84,13 +81,33 @@ class AuthService {
   }
 
   Future<ServerResponse> verify(String token, String code) async {
-    print("VERIFYING $token W $code");
     return await sendServerRequestAuthenticated(
       "/users/verification/",
       RequestType.Post,
       token: token,
       headers: {"Content-Type": "application/json"},
       data: jsonEncode({"code": code}),
+    );
+  }
+
+  Future<ServerResponse> forgotPassword({required String value}) async {
+    return await sendServerRequest(
+      "/users/forgot/",
+      RequestType.Get,
+      headers: {"Content-Type": "application/json"},
+      queryParams: {"value": value},
+    );
+  }
+
+  Future<ServerResponse> changePassword(
+      {required String token, required String password}) async {
+    return await sendServerRequest(
+      "/users/forgot/",
+      RequestType.Post,
+      headers: {"Content-Type": "application/json"},
+      data: jsonEncode(
+        {"password": password, "token": token},
+      ),
     );
   }
 }

@@ -122,4 +122,4 @@ async def postAnswer(
             None if user is None else user.uid,
         )
 
-    return Success()
+    return Success(detail="Survey has been answered")

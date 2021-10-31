@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/views/home.dart';
 import 'package:surveyplatform/widgets/ver_container.dart';
@@ -32,10 +33,7 @@ class _VerificationPageState extends State<VerificationPage> {
             smallHeight
                 ? SizedBox.shrink()
                 : InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => HomePage()));
-                    },
+                    onTap: () => GoRouter.of(context).push("/home"),
                     child: Container(
                       alignment: Alignment.topLeft,
                       child: Image.asset(

@@ -49,5 +49,5 @@ class UserResponse(BaseResponse):
     response_model=UserResponse,
 )
 async def authenticatedRoute(user: User = Depends(getUser)):
-    print(user)
+
     return UserResponse(data=UserValueModel(user=user))

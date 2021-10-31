@@ -13,5 +13,14 @@
             "flutterMode": "debug",
             "program": "lib/main.dart"
         },
+        {
+            "name": "web",
+            "cwd": "surveyplatform",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "chrome",
+            "flutterMode": "debug",
+            "program": "lib/main.dart"
+        },
     ]
 }

@@ -13,9 +13,10 @@ from auth.jwt import getUser
 from data.models import User
 from data.services.user_service import UserService
 from routes.user import registrator as _registrator_module
+from routes.user.manager import forgottenPasswordManager
 from routes.user.registrator import registrator
 
-router = APIRouter()
+router = APIRouter()  # /users
 
 
 @router.get("/")
@@ -81,6 +82,7 @@ class VerificationModel(BaseModel):
 
 
 @router.get("/verification")
+@router.get("/verification/")
 async def generateVer(user: User = Depends(getUser)):
 
     if user.verified:
@@ -92,6 +94,7 @@ async def generateVer(user: User = Depends(getUser)):
 
 
 @router.post("/verification")
+@router.post("/verification/")
 async def verifyUser(
     model: VerificationModel,
     user: User = Depends(getUser),
@@ -109,3 +112,26 @@ async def verifyUser(
         await service.verifyUser(user)
 
     return Success(detail="Account verified!")
+
+
+@router.get("/forgot")
+@router.get("/forgot/")
+async def forgotPasswordRequest(value: str):
+    await forgottenPasswordManager.startResetUserForgottenPassword(value)
+    return Success(
+        detail="An Email has been sent to your account provided that the email and/or username exists in our records."
+    )
+
+
+class ChangePassworwdModel(BaseModel):
+    password: str
+    token: str
+
+
+@router.post("/forgot")
+@router.post("/forgot/")
+async def forgotPassword(model: ChangePassworwdModel):
+    await forgottenPasswordManager.resetUserForgottenPassword(
+        model.token, model.password
+    )
+    return Success(detail="Your password has been reset")

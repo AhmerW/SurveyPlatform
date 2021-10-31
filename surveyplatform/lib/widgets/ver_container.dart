@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/data/states/auth_state.dart';
@@ -75,15 +76,11 @@ class _VerContainerState extends State<VerContainer> {
                   );
                   asn.verify(widget.token, code).then(
                     (response) {
-                      print("ROK: ${response.ok}");
-                      print("RER: ${response.hasError}");
                       if (response.ok) {
                         asn.getUser(widget.token).then((user) {
-                          print("tor $user");
                           if (user != null) {
                             asn.updateAuthState(user, widget.token);
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => HubPage()));
+                            GoRouter.of(context).go("/hub");
                           }
                         });
                       } else if (response.hasError) {

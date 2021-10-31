@@ -49,6 +49,20 @@ class SurveyService {
     return surveysFromResponse(response);
   }
 
+  Future<Survey?> getSurvey(int survey_id) async {
+    ServerResponse response = await sendServerRequest(
+      serverPath,
+      RequestType.Get,
+      queryParams: {
+        "surveyid": survey_id.toString(),
+      },
+    );
+
+    if (response.data.containsKey("surveys")) {
+      return Survey.fromJson(response.data["surveys"]);
+    }
+  }
+
   Future<List<Survey>> getSurveyDrafts(BuildContext context) async {
     ServerResponse response = await sendServerRequestAuthenticated(
       "/drafts/",
@@ -59,7 +73,6 @@ class SurveyService {
   }
 
   Future<ServerResponse> postSurvey(Survey survey, String token) async {
-    print("sending authenticated request");
     Map<String, dynamic> sj = survey.toJson();
     if (sj["survey_id"] == Survey.invalidID) {
       sj.remove("survey_id");

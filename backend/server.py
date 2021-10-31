@@ -19,7 +19,7 @@ from routes.auth import router as auth_router
 
 @app.route(base_path)
 async def home(_):
-    print([{"path": route.path, "name": route.name} for route in app.routes])
+
     return Success()
 
 

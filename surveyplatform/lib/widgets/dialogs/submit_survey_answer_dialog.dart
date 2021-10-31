@@ -8,6 +8,7 @@ import 'package:surveyplatform/views/home.dart';
 
 class SubmitSurveyAnswerDialog extends StatefulWidget {
   final int survey_id;
+
   const SubmitSurveyAnswerDialog(this.survey_id);
 
   @override

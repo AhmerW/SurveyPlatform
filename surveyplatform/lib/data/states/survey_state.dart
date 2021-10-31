@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:surveyplatform/data/network.dart';
 import 'package:surveyplatform/data/response.dart';
 import 'package:surveyplatform/main.dart';
 import 'package:surveyplatform/models/survey.dart';
@@ -40,6 +41,10 @@ class SurveyStateNotifier extends ChangeNotifier {
     } catch (_) {
       return null;
     }
+  }
+
+  Future<Survey?> fetchSurvey(int survey_id) async {
+    return locator<SurveyService>().getSurvey(survey_id);
   }
 
   Future<ServerResponse> postSurvey(Survey survey, String token) async {

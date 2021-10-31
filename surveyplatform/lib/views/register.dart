@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     flex: 3,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      color: Color(0xFF161D21),
+                      color: Colors.white,
                       child: Column(
                         children: [
                           Container(
@@ -42,10 +42,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               "Lag din SurveyPlatform konto",
                               style: TextStyle(
                                 fontSize: 35,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
+                          Image.asset("assets/join_us.jpg")
                         ],
                       ),
                     ),

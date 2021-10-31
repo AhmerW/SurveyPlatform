@@ -11,6 +11,90 @@
             "answer_id": 13,
             "timestamp": 1635074413,
             "uid": 4
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "bra!"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 16,
+            "timestamp": 1635679987,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "bra!"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 17,
+            "timestamp": 1635680029,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "bra ja"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 18,
+            "timestamp": 1635680071,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "bra"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 19,
+            "timestamp": 1635680243,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "xxx"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 20,
+            "timestamp": 1635680279,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "ja"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 21,
+            "timestamp": 1635680334,
+            "uid": null
+        },
+        {
+            "answers": [
+                {
+                    "question_id": 25,
+                    "value": "test data"
+                }
+            ],
+            "survey_id": 26,
+            "answer_id": 22,
+            "timestamp": 1635684418,
+            "uid": null
         }
     ]
 }

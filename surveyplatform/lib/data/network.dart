@@ -29,7 +29,6 @@ Future<ServerResponse> sendRequest(
     queryParameters: queryParams,
     port: port,
   );
-  print(url);
 
   late http.Response response;
   if (requestType == RequestType.Post) {
