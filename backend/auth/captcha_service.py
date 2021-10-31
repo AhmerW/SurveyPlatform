@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from itertools import count
 from enum import Enum, auto
 from typing import Dict, Final, Optional, Set
 import operator
 import secrets
+import os
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
@@ -11,6 +11,7 @@ from fastapi import Request
 from pydantic import BaseModel
 
 
+from data.state.state_manager import stateManager
 from data.services.base import StateContainer
 from responses import Error
 
@@ -43,16 +44,17 @@ _words = [
 ]
 
 
-class CaptchaOperation(Enum):
-    add = "plus"
-    sub = "minus"
+captchaOperations = [
+    "plus",
+    "minus",
+]
 
 
 class Captcha(BaseModel):
     id: str
     n1: int
     n2: int
-    operation: CaptchaOperation
+    operation: str
 
 
 class CaptchaFactory:
@@ -66,47 +68,66 @@ class CaptchaFactory:
             id=cls.getId(),
             n1=secrets.randbelow(MAX_N1),
             n2=secrets.randbelow(MAX_N2),
-            operation=secrets.choice(list(CaptchaOperation)),
+            operation=secrets.choice(
+                captchaOperations,
+            ),
         )
+
+
+# Add automatic methods and connection with StateManager through StateContainer
+"""
+class CaptchaStateContainer(StateContainer):
+    def __init__(
+        self,
+        _captchas: Dict[int, Captcha] = dict(),
+        _tokens: Set[str] = set(),
+    ) -> None:
+        self._captchas = _captchas
+        self._tokens = _tokens
+"""
 
 
 @dataclass
 class CaptchaStateContainer(StateContainer):
-    _captchas: Dict[int, Captcha] = field(default_factory=dict)
-    _tokens: Set[str] = field(default_factory=set)
+    captchas_id: int  # dict
+    tokens_id: int  # set
 
 
 class CaptchaService:
-    _state = CaptchaStateContainer()
+    _state = CaptchaStateContainer(
+        captchas_id=1,
+        tokens_id=2,
+    )
 
     @classmethod
     @property
     def state(cls) -> CaptchaStateContainer:
         return cls._state
 
-    def verifyToken(self, token: str) -> bool:
+    async def verifyToken(self, token: str) -> bool:
         try:
-            self.state._tokens.remove(token)
+            await stateManager.setRemove(self.state.tokens_id, token)
+
             return True
         except KeyError:
             return False
 
-    def generateToken(self) -> str:
+    async def generateToken(self) -> str:
         token = secrets.token_urlsafe(10)
-        self.state._tokens.add(token)
+        await stateManager.setSet(self.state.tokens_id, token)
         return token
 
-    def createCaptcha(self) -> Captcha:
+    async def createCaptcha(self) -> Captcha:
         captcha = CaptchaFactory.get()
-        self.state._captchas[captcha.id] = captcha
+        await stateManager.dictSetMultiple(captcha.id, captcha.dict())
 
         return captcha
 
     def calculateCaptcha(self, captcha: Captcha) -> int:
 
-        if captcha.operation == CaptchaOperation.add:
+        if captcha.operation == "plus":
             return operator.add(captcha.n1, captcha.n2)
-        elif captcha.operation == CaptchaOperation.sub:
+        elif captcha.operation == "minus":
 
             return operator.sub(captcha.n1, captcha.n2)
 
@@ -120,7 +141,7 @@ class CaptchaService:
 
         return isinstance(value, int) and (value == self.calculateCaptcha(captcha))
 
-    def processCaptcha(
+    async def processCaptcha(
         self,
         captcha: Captcha,
         value: int,
@@ -129,17 +150,18 @@ class CaptchaService:
         if not self.captchaIsValid(captcha, value):
             raise Error("Invalid Captcha")
 
-        self.state._captchas.pop(captcha.id)
-        return self.generateToken()
+        await stateManager.dictDelete(captcha.id)
+        return await self.generateToken()
 
-    def solve(self, captcha_id: str, value: int) -> bool:
+    async def solve(self, captcha_id: str, value: int) -> bool:
 
-        captcha: Optional[Captcha] = self.state._captchas.get(captcha_id)
-        if captcha is None:
+        captcha = await stateManager.dictGetMultiple(captcha_id)
 
+        if not captcha:
             raise Error("Captcha does not exist")
+        captcha = Captcha(**captcha)
 
-        return self.processCaptcha(captcha, value)
+        return await self.processCaptcha(captcha, value)
 
     def generateCaptchaImage(self, captcha: Captcha) -> Image.Image:
         im = Image.new("RGBA", (450, 100), (0, 0, 0, 0))
@@ -153,8 +175,8 @@ class CaptchaService:
 
         canvas.text(
             (10, 40),
-            f"{n1} {captcha.operation.value} {n2}",
-            font=ImageFont.truetype("arial.ttf", 40),
+            f"{n1} {captcha.operation} {n2}",
+            font=ImageFont.truetype(getFontPath(), 40),
         )
         canvas.line(
             [0, 65, 450, 65],
@@ -174,13 +196,22 @@ captchaService: Final[CaptchaService] = CaptchaService()
 # solve_token
 # issued when a captcha is solved (OTT)
 
+mapped_fonts = {}
 
-def requireSolvedCaptcha(request: Request) -> Optional[str]:
+
+def getFontPath() -> str:
+    if os.name == "nt":
+        return "arial.ttf"
+
+    return os.path.join("usr", "share", "fonts", "truetype", "dejavu", "DejaVuSans.ttf")
+
+
+async def requireSolvedCaptcha(request: Request) -> Optional[str]:
     st = request.headers.get("solve-token")
     if st is None:
         raise Error("Solve token not provided")
 
-    if captchaService.verifyToken(st):
+    if await captchaService.verifyToken(st):
         return st
 
     raise Error("Invalid solve-token")

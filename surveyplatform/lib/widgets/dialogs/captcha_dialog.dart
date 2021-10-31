@@ -66,9 +66,18 @@ class _CaptchaDialogState extends State<CaptchaDialog> {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        cs.captcha_id != null
-                            ? Text(cs.captcha_id!)
-                            : SizedBox.shrink(),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(
+                            icon: Icon(Icons.refresh),
+                            onPressed: () {
+                              setState(() {
+                                solving = false;
+                                cs.reset();
+                              });
+                            },
+                          ),
+                        ),
                         image,
                         text == null
                             ? SizedBox.shrink()

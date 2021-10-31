@@ -23,7 +23,7 @@ class CaptchaIn(BaseModel):
 
 @router.get("/")
 async def getCaptcha():
-    captcha = captchaService.createCaptcha()
+    captcha = await captchaService.createCaptcha()
     image = captchaService.generateCaptchaImage(captcha)
     buffer = BytesIO()
 
@@ -41,6 +41,6 @@ async def getCaptcha():
 @router.post("/")
 async def solveCaptcha(captcha: CaptchaIn):
 
-    response = captchaService.solve(captcha.captcha_id, captcha.value)
+    response = await captchaService.solve(captcha.captcha_id, captcha.value)
 
     return Success(dict(solve_token=response), detail="Captcha solved")

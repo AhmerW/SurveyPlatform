@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           ImageText(true,
               image: "assets/stock1-t.png",
-              title: "Lyst på forte penger?",
+              title: "Lyst på raske penger?",
               text:
                   "Det skal gå fort å svare på våre undersøkelser.\nSamtidig sørger vi får at dere får så mye ut av det."),
           ImageText(
